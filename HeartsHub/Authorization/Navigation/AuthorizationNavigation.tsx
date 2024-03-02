@@ -1,5 +1,5 @@
 import { Stack } from "../../Navigation/Navigation";
-import AuthorizationCarousel from "../AuthorizationCarousel.tsx/AuthorizationCarousel";
+import AuthorizationCarousel from "../Authorization carousel page/AuthorizationCarousel";
 import EnteringAnEmailAddressPage from "../Entering an email address page/EnteringAnEmailAddressPage";
 import SignInOrSignUpPage from "../Sign in or sign up page/SignInOrSignUpPage";
 import VerifyCodePage from "../Verify code page/VerifyCodePage";

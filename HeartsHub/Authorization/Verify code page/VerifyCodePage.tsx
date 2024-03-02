@@ -1,43 +1,75 @@
-import React, { useRef, useState } from "react";
-import BackGroundGradinetView from "../../SemiComponents/BackGround/BackGroundGradientView";
-import AuthorizationProgresBar from "../../SemiComponents/Other/AuthorizationProgresBar";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  Keyboard,
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import {
   height,
-  heightOfMainTitle,
-  marginTopForTextAuthorization,
   width,
 } from "../../SemiComponents/Constants/SizeConstants";
 import AuthorizationTitle from "../../SemiComponents/Other/AuthorizationTitle";
 import AuthorizationInput from "../../SemiComponents/Inputs/AuthorizationInput";
-import BackAndNextButton from "../../SemiComponents/Buttons/Authorization buttons/BackAndNextButton";
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsPressedNextButtonAuthorization } from "../../redux/Authorization/selectors";
+import {
+  setFulfillmentOfTheConditionForTheNextButtonAuthorization,
+  setIsEnableNextButtonAuthorization,
+  setIsPressedNextButtonAuthorization,
+} from "../../redux/Authorization/Actions";
 
-interface VerifyCodePageProps {}
+interface VerifyCodePageProps {
+  index: number;
+  isSelected:boolean;
+}
 
-const VerifyCodePage: React.FC<VerifyCodePageProps> = ({}) => {
+const VerifyCodePage: React.FC<VerifyCodePageProps> = ({
+  index,
+  isSelected
+}) => {
+  const dispatch = useDispatch();
+  const isPressedNextButtonAuthorization = useSelector(
+    selectIsPressedNextButtonAuthorization
+  );
   const verifyCode = "0228";
   const inputRef = useRef<TextInput>(null);
-  const [inputCode, setInputCode] = useState("0227");
+  const [inputCode, setInputCode] = useState("0228");
   const [isValidCode, setIsValidCode] = useState(true);
-  const pressOnBackButton = () => {};
-  const pressOnNextButton = () => {
-    if (verifyCode == inputCode) {
-      console.log("ABOBA");
-      return;
+
+  useEffect(() => {
+    if (isSelected) {
+      inputRef.current?.focus();
     }
-    setInputCode("");
-    setIsValidCode(false);
-    inputRef?.current?.blur();
-  };
+  }, [isSelected]);
+  useEffect(() => {
+    if (isSelected) {
+      dispatch(
+        setIsEnableNextButtonAuthorization(
+          inputCode.length == verifyCode.length
+        )
+      );
+    }
+  }, [inputCode, isSelected]);
+
+  useEffect(() => {
+    if (isSelected) {
+      dispatch(setIsPressedNextButtonAuthorization(false));
+      dispatch(
+        setFulfillmentOfTheConditionForTheNextButtonAuthorization(
+          verifyCode == inputCode
+        )
+      );
+
+      if (verifyCode != inputCode) {
+        setInputCode("");
+        setIsValidCode(false);
+        inputRef?.current?.blur();
+      }
+    }
+  }, [isPressedNextButtonAuthorization]);
   return (
-    <View style={{width}}>
+    <View style={{ width }}>
       <AuthorizationTitle text="Введіть код" />
       <AuthorizationInput
         color={isValidCode ? "white" : "#FFEF60"}
@@ -87,7 +119,7 @@ const VerifyCodePage: React.FC<VerifyCodePageProps> = ({}) => {
             fontWeight: "800",
           }}
         >
-          {"Вкажіть коректний email"}
+          {"Вкажіть коректний код"}
         </Text>
       )}
       <TouchableOpacity activeOpacity={0.7}>

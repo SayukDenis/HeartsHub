@@ -8,10 +8,10 @@ import {
   width,
 } from "../Constants/SizeConstants";
 interface AuthorizationProgresBarProps {
-  currentPage: number;
+  progress: number;
 }
 const AuthorizationProgresBar: React.FC<AuthorizationProgresBarProps> = ({
-  currentPage,
+  progress,
 }) => {
   return (
     <View
@@ -30,7 +30,7 @@ const AuthorizationProgresBar: React.FC<AuthorizationProgresBarProps> = ({
       <View
         style={{
           height: heightOfProgressAuthorization,
-          width: (currentPage / countOfAuthorizationPages) * width,
+          width: ((progress/width+1) / countOfAuthorizationPages) * width,
           backgroundColor: "#5B0010",
           borderRadius: 10,
         }}
