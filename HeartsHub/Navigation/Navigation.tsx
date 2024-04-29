@@ -1,16 +1,22 @@
-import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import AuthorizationNavigation from "../Authorization/Navigation/AuthorizationNavigation";
-export const Stack = createStackNavigator();
+import AuthorizationNavigation from "../Section/Authorization/Other/Navigation/AuthorizationNavigation";
+import { Stack } from "./Stack";
+import SettingsNavigation from "../Section/Settings/Navigation/SettingsNavigation";
+
+
 const Navigation = () => {
+  
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={"AuthorizationNavigation"}
+        initialRouteName="O"
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name="AuthorizationNavigation" component={AuthorizationNavigation} />
-  
+        <Stack.Screen
+          name="AuthorizationNavigation"
+          component={AuthorizationNavigation}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

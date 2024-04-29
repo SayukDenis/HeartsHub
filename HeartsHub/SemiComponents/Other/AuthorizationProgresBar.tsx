@@ -1,17 +1,19 @@
 import React from "react";
 import { View } from "react-native";
 import {
-  countOfAuthorizationPages,
   heightOfProgressAuthorization,
   marginTopForTextAuthorization,
   statusBarHeight,
   width,
 } from "../Constants/SizeConstants";
+
 interface AuthorizationProgresBarProps {
   progress: number;
+  pagesLength: number;
 }
 const AuthorizationProgresBar: React.FC<AuthorizationProgresBarProps> = ({
   progress,
+  pagesLength,
 }) => {
   return (
     <View
@@ -22,7 +24,7 @@ const AuthorizationProgresBar: React.FC<AuthorizationProgresBarProps> = ({
           statusBarHeight -
           heightOfProgressAuthorization / 2,
         height: heightOfProgressAuthorization,
-        borderRadius: 10,
+        //borderRadius: 10,
         overflow: "hidden",
         width,
       }}
@@ -30,9 +32,12 @@ const AuthorizationProgresBar: React.FC<AuthorizationProgresBarProps> = ({
       <View
         style={{
           height: heightOfProgressAuthorization,
-          width: ((progress/width+1) / countOfAuthorizationPages) * width,
+          width: ((progress / width + 1) / pagesLength) * width,
           backgroundColor: "#5B0010",
-          borderRadius: 10,
+          borderEndEndRadius:
+            ((progress / width + 1) / pagesLength) * width == width ? 0 : 10,
+          borderTopEndRadius:
+            ((progress / width + 1) / pagesLength) * width == width ? 0 : 10,
         }}
       />
       <View

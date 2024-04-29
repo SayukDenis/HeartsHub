@@ -1,5 +1,5 @@
 import React from "react";
-import GenderAuthorizationButton from "./GenderAuthorizationButton";
+import GenderAuthorizationButton from "./SelectForMulitplyAuthorizationButton";
 import { Text, Platform } from "react-native";
 import { height } from "../../Constants/SizeConstants";
 interface SelectAuthorizationButtonProps {

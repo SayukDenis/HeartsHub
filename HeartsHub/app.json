@@ -4,7 +4,9 @@
     "slug": "HeartsHub",
     "version": "1.0.0",
     "orientation": "portrait",
+    "hotReload": true,
     "userInterfaceStyle": "light",
+    "permissions": ["camera"],
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"

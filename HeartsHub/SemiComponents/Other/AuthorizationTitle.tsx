@@ -8,6 +8,7 @@ import {
 
 interface AuthorizationTitleProps {
   text: string;
+  
 }
 
 const AuthorizationTitle: React.FC<AuthorizationTitleProps> = ({ text }) => {
