@@ -21,6 +21,7 @@ import {
   selectSmokeStatusForAuthorization,
 } from "../../../../redux/Authorization/selectors";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class SmokeStatusPage extends RegistrationPage {
   constructor(props: any) {
@@ -34,11 +35,17 @@ class SmokeStatusPage extends RegistrationPage {
     return arrayOfBindings[0] != "";
   };
   checkingGoToNextPage = (arrayOfBindings: any[]) => {
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(setSmokeStatusForAuthorization, arrayOfBindings[0]);
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    const invokerState: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setSmokeStatusForAuthorization,
+      variableField: arrayOfBindings[0],
+      attribute: "smokeStatus",
+      isAuthorized: false,
+    });
+    invokerState.request();
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
   };
   componentDidMount() {

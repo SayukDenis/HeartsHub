@@ -31,7 +31,7 @@ class AddNewPasswordPage extends RegistrationPage {
   private inputRef: RefObject<TextInput>;
   constructor(props: any) {
     super(props);
-    
+
     this.state = {
       password: "",
     };
@@ -51,15 +51,15 @@ class AddNewPasswordPage extends RegistrationPage {
   protected checkingGoToNextPage = (arrayOfBindings: any[]) => {
     const { secondPassword }: any = this.props;
     const { password }: any = this.state;
-      this.command.update(setIsEnableNextButtonAuthorization, false);
-      this.command.update(
-        setFulfillmentOfTheConditionForTheNextButtonAuthorization,
+    this.dispatch(setIsEnableNextButtonAuthorization(false));
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(
         secondPassword == password
-      );
-      if(secondPassword!=password){
-        this.setState({password:""})
-      }
-
+      )
+    );
+    if (secondPassword != password) {
+      this.setState({ password: "" });
+    }
   };
   componentDidMount() {
     const { page, index }: any = this.props;

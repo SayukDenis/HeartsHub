@@ -1,7 +1,6 @@
-import { ReactNode } from "react";
-import Command from "../Command/Command";
+import { Dispatch, UnknownAction } from "redux";
 
 export interface ISubject {
-    command:Command;
+    dispatch:Dispatch<UnknownAction>
     request: (isCodeVerify: boolean|null,setModalWindow:(state:boolean|null)=>void) => React.JSX.Element|null
 }

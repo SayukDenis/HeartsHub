@@ -20,33 +20,29 @@ import BackGroundGradientView from "../../../SemiComponents/BackGround/BackGroun
 import { height, width } from "../../../SemiComponents/Constants/SizeConstants";
 import {
   selectAuthorizationPage,
+  selectBufferEmail,
+  selectEmailForAuthorization,
   selectFulfillmentOfConditionForNextButtonAuthorization,
   selectIsEnableNextButtonAuthorization,
   selectIsPressedNextButtonAuthorization,
 } from "../../../redux/Authorization/selectors";
 import { connect } from "react-redux";
 import {
-  setEmailForAuthorization,
   setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-  setGenderForAuthorization,
   setIsEnableNextButtonAuthorization,
   setIsPressedNextButtonAuthorization,
-  setNameForAuthorization,
   setSelectedAuthorizationPage,
-  setSexualOrientationForAuthorization,
-  setSurnameForAuthorization,
 } from "../../../redux/Authorization/Actions";
-import { initialStateForAuthorizationForm } from "../../../redux/Authorization/Reducer";
-
 import { IStrategy } from "../Abstract classes and interfaces/Strategy/Strategy";
-import Command from "../Abstract classes and interfaces/Command/Command";
 import Facade from "../Abstract classes and interfaces/Facade/Facade";
 import { AdaptedRegistrationPage } from "../Abstract classes and interfaces/Template method/AdaptedRegistrationPage";
+import { Dispatch, UnknownAction } from "redux";
+import { initObject } from "../../../Local dao/Initialiazation";
 
 class AuthorizationCarousel extends Component implements IStrategy {
   listOfPages: AdaptedRegistrationPage[];
   scrollViewRef: RefObject<ScrollView>;
-  private command: Command;
+  private dispatch: Dispatch<UnknownAction>;
   constructor(props: any) {
     super(props);
     const facade = new Facade();
@@ -55,33 +51,11 @@ class AuthorizationCarousel extends Component implements IStrategy {
     };
     this.listOfPages = facade.getRegistrationPages();
     this.scrollViewRef = createRef();
-    this.command = new Command({
-      dispatch: props.dispatch,
-    });
+    this.dispatch = props.dispatch;
   }
   pressOnBackButton = () => {
     const { page }: any = this.props;
     if (page == 1) {
-      this.command.update(
-        setEmailForAuthorization,
-        initialStateForAuthorizationForm.email
-      );
-      this.command.update(
-        setNameForAuthorization,
-        initialStateForAuthorizationForm.name
-      );
-      this.command.update(
-        setSurnameForAuthorization,
-        initialStateForAuthorizationForm.surname
-      );
-      this.command.update(
-        setGenderForAuthorization,
-        initialStateForAuthorizationForm.gender
-      );
-      this.command.update(
-        setSexualOrientationForAuthorization,
-        initialStateForAuthorizationForm.sexualOrientation
-      );
       const { navigation }: any = this.props;
       navigation.goBack();
       return;
@@ -92,7 +66,7 @@ class AuthorizationCarousel extends Component implements IStrategy {
         y: 0,
         animated: true,
       });
-      this.command.update(setSelectedAuthorizationPage, page - 2);
+      this.dispatch(setSelectedAuthorizationPage(page - 2));
       Keyboard.dismiss();
       return;
     }
@@ -101,18 +75,21 @@ class AuthorizationCarousel extends Component implements IStrategy {
       y: 0,
       animated: true,
     });
-    this.command.update(setSelectedAuthorizationPage, page - 1);
+    this.dispatch(setSelectedAuthorizationPage(page - 1));
     Keyboard.dismiss();
   };
   pressOnNextButton = () => {
-    this.command.update(setIsPressedNextButtonAuthorization, true);
+    this.dispatch(setIsPressedNextButtonAuthorization(true));
   };
   componentDidMount(): void {}
   componentDidUpdate(prevProps: any) {
-    const { fulfillmentOfConditionForNextButtonAuthorization }: any =
-      this.props;
+    const {
+      fulfillmentOfConditionForNextButtonAuthorization,
+      email,
+      bufferEmail,
+    }: any = this.props;
     const old = prevProps.fulfillmentOfConditionForNextButtonAuthorization;
-
+   
     if (
       fulfillmentOfConditionForNextButtonAuthorization &&
       old != fulfillmentOfConditionForNextButtonAuthorization
@@ -124,19 +101,33 @@ class AuthorizationCarousel extends Component implements IStrategy {
           routes: [{ name: "MainCarouselPageNavigation" as never }],
         });
       }
+      if(page==1&&email!="" &&bufferEmail==email){
+        this.scrollViewRef.current?.scrollTo({
+          x: (page+1) * width,
+          y: 0,
+          animated: true,
+        });
+        this.dispatch(setSelectedAuthorizationPage(page + 2));
+        Keyboard.dismiss();
+  
+        this.dispatch(setIsEnableNextButtonAuthorization(false));
+        this.dispatch(
+          setFulfillmentOfTheConditionForTheNextButtonAuthorization(false)
+        );
+        return
+      }
       this.scrollViewRef.current?.scrollTo({
         x: page * width,
         y: 0,
         animated: true,
       });
-      this.command.update(setSelectedAuthorizationPage, page + 1);
+      this.dispatch(setSelectedAuthorizationPage(page + 1));
       Keyboard.dismiss();
 
-      this.command.update(setIsEnableNextButtonAuthorization, false);
+      this.dispatch(setIsEnableNextButtonAuthorization(false));
     }
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      false
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(false)
     );
   }
   render() {
@@ -196,5 +187,7 @@ const mapStateToProps = (state: any) => ({
   page: selectAuthorizationPage(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),
+  bufferEmail: selectBufferEmail(state),
+  email: selectEmailForAuthorization(state),
 });
 export default connect(mapStateToProps)(AuthorizationCarousel);

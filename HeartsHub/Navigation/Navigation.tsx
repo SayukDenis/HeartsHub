@@ -9,7 +9,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="O"
+        initialRouteName="AuthorizationNavigation"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen

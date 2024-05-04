@@ -1,4 +1,3 @@
-import { compose } from "redux";
 import AddPasswordPageFabric from "../../Authorization carousel pages/Add Password page/AddPasswordPageFabric";
 import AlcoholStatusPageFabric from "../../Authorization carousel pages/Alcohol status page/AlcoholStatusPageFabric";
 import AskAboutChildrenPageFabric from "../../Authorization carousel pages/Children status page/AskAboutChildrenPageFabric";
@@ -45,6 +44,8 @@ class Facade {
             new SmokeStatusPageFabric(),
             new LanguageStatusPageFabric(),
             new SearchStatusPageFabric(),
+            new SearchSettingsFabric(),
+            new LocationPageFabric(),
             new SelfInformationPageFabric(),
             new ChoosePhotoPageFabric(),
         ];

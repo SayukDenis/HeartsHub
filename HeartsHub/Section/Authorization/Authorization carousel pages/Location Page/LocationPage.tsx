@@ -31,6 +31,7 @@ import { RegistrationPage } from "../../Abstract classes and interfaces/Template
 import { LocalityData, localityData } from "../../../../assets/Data/locality";
 import { getLocationData, stringBuilder } from "./Functions";
 import GeoLocationText from "./GeoLocationText";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class LocationPage extends RegistrationPage {
   private inputRef: RefObject<TextInput>;
@@ -40,7 +41,7 @@ class LocationPage extends RegistrationPage {
     const { geoLocation }: any = this.props;
 
     this.state = {
-      location: "",
+      location: geoLocation >= 0 ? stringBuilder(localityData[geoLocation]) : "",
       toggle: geoLocation == -1,
       results: [],
       selectLocation: geoLocation >= 0 ? localityData[geoLocation] : null,
@@ -54,14 +55,20 @@ class LocationPage extends RegistrationPage {
   };
   protected checkingGoToNextPage = (arrayOfBindings: any[]) => {
     const { toggle }: any = this.state;
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(setIsEnableNextButtonAuthorization, false);
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    this.dispatch(setIsEnableNextButtonAuthorization(false));
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
     const index = localityData.indexOf(toggle ? -2 : arrayOfBindings[0]);
-    this.command.update(setGeoLocation, index);
+    const invokerState: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setGeoLocation,
+      variableField: index,
+      attribute: "geoLocation",
+      isAuthorized: false,
+    });
+    invokerState.request()
   };
   componentDidMount() {
     const { page, index }: any = this.props;

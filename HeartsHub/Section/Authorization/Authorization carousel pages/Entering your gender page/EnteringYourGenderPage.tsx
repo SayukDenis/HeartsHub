@@ -21,6 +21,7 @@ import {
 import SelectAuthorizationButton from "../../../../SemiComponents/Buttons/Authorization buttons/SelectAuthorizationButton";
 import GenderContainerSelect from "./GenderContainerSelect";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 class EnteringYourGenderPage extends RegistrationPage {
   constructor(props: any) {
     super(props);
@@ -36,14 +37,19 @@ class EnteringYourGenderPage extends RegistrationPage {
     return arrayOfBindings[0] != null;
   };
   checkingGoToNextPage = (arrayOfBindings: any[]) => {
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(
-      setGenderForAuthorization,
-      arrayOfBindings[0] != null ? genders[arrayOfBindings[0]] : ""
-    );
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      arrayOfBindings[0] != null
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    const invokerState: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setGenderForAuthorization,
+      variableField: genders[arrayOfBindings[0]],
+      attribute: "gender",
+      isAuthorized: false,
+    });
+    invokerState.request()
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(
+        arrayOfBindings[0] != null
+      )
     );
   };
   componentDidMount() {

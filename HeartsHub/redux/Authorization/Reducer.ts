@@ -1,23 +1,10 @@
+import { getAuthObjectFromDao, initObject } from "../../Local dao/Initialiazation";
 import { AuthorizationForm } from "../../Section/Authorization/Other/Data types/Interfaces";
 import { alcoholStatus, childrenStatus, genders, searchGender, searchStatus, sexualOrientations, smokeStatus } from "../../SemiComponents/Constants/Data";
-/*export const initialStateForAuthorizationForm: AuthorizationForm = {
-  email: "",
-  name: '',
-  surname: '',
-  date: '',
-  gender: "",
-  sexualOrientation: "",
-  height: "",
-  childrenStatus: "",
-  alcoholStatus: "",
-  smokeStatus: "",
-  languages: [],
-  searchStatus: "",
-  selfInformation: "",
-  linkToPhoto:[],
-};*/
+let initialStateForAuthorizationForm: AuthorizationForm  = initObject
 
-export const initialStateForAuthorizationForm: AuthorizationForm = {
+
+/*export const initialStateForAuthorizationForm: AuthorizationForm = {
   email: 'denisok.77711123@gmail.com',
   name: 'Денис',
   surname: 'Саюк',
@@ -45,7 +32,7 @@ export const initialStateForAuthorizationForm: AuthorizationForm = {
   searchGender: searchGender[0],
   secondPassword: "",
   geoLocation: 2705
-};
+};*/
 export const isPressedNextButtonAuthorizationReducer = (state = false, action: any) => {
   switch (action.type) {
     case 'SET_IS_PRESSED_NEXT_BUTTON_AUTHORIZATION':
@@ -90,6 +77,8 @@ export const selectedAuthorizationPageReducer = (state = 1, action: any) => {
 };
 export const authorizationFormReducer = (state = initialStateForAuthorizationForm, action: any) => {
   switch (action.type) {
+    case "SET_AUTH_FORM":
+      return action.payload
     case 'SET_EMAIL_FOR_AUTHORIZATION':
       return { ...state, email: action.payload };
     case 'SET_NAME_FOR_AUTHORIZATION':

@@ -29,6 +29,7 @@ import {
 import { connect } from "react-redux";
 import ConfirmButton from "./ConfirmButton";
 import ConfirmModalWindow from "./ConfirmModalWindow";
+import { Dispatch, UnknownAction } from "redux";
 
 interface SecurityStrategyProps {
   listOfPages: AdaptedRegistrationPage[];
@@ -40,26 +41,24 @@ class SecurityStrategy
 {
   listOfPages: AdaptedRegistrationPage[];
   scrollViewRef: RefObject<ScrollView> = createRef<ScrollView>();
-  private command: Command;
+  private dispatch: Dispatch<UnknownAction>;
   constructor(props: any) {
     super(props);
     this.listOfPages = props.listOfPages;
-    this.command = new Command({
-      dispatch: props.dispatch,
-    });
-    this.state = { modalWindow: false };
-    this.command.update(setSelectedAuthorizationPage, 1);
+
+    (this.dispatch = props.dispatch), (this.state = { modalWindow: false });
+    this.dispatch(setSelectedAuthorizationPage(1));
   }
 
   pressOnBackButton = () => {
     const { page }: any = this.props;
-    this.command.update(setSelectedAuthorizationPage, page - 1);
+    this.dispatch(setSelectedAuthorizationPage(page - 1));
     this.scrollViewRef.current?.scrollTo({ x: page - 2, y: 0, animated: true });
   };
-  pressOnNextButton() {}
-  pressOnConfirmButton = () => {
-    this.command.update(setIsPressedNextButtonAuthorization, true);
-  };
+  pressOnNextButton() {
+    this.dispatch(setIsPressedNextButtonAuthorization(true));
+  }
+ 
   componentDidUpdate(prevProps: any) {
     const { fulfillmentOfConditionForNextButtonAuthorization, page }: any =
       this.props;
@@ -71,16 +70,15 @@ class SecurityStrategy
       if (this.listOfPages.length == page) {
         this.setState({ modalWindow: true });
       } else {
-        this.command.update(setSelectedAuthorizationPage, page + 1);
+        this.dispatch(setSelectedAuthorizationPage(page + 1));
         this.scrollViewRef.current?.scrollTo({
           x: page * width,
           y: 0,
           animated: true,
         });
       }
-      this.command.update(
-        setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-        false
+      this.dispatch(
+        setFulfillmentOfTheConditionForTheNextButtonAuthorization(false)
       );
     }
   }
@@ -123,7 +121,7 @@ class SecurityStrategy
               <ConfirmButton
                 showBackButton={page >= 2}
                 isConfirmButtonEnabled={isEnableNextButtonAuthorization}
-                pressOnConfirmButton={this.pressOnConfirmButton}
+                pressOnConfirmButton={this.pressOnNextButton}
                 pressOnBackButton={this.pressOnBackButton}
               />
             </View>

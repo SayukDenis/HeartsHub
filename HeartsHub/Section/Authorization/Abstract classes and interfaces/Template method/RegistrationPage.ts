@@ -2,24 +2,25 @@ import { Component } from "react";
 import { State } from "../State/State";
 import Command from "../Command/Command";
 import { setFulfillmentOfTheConditionForTheNextButtonAuthorization, setIsPressedNextButtonAuthorization } from "../../../../redux/Authorization/Actions";
+import { Dispatch, UnknownAction } from "redux";
 
 export abstract class RegistrationPage extends Component {
-    index: boolean;
-    command: Command;
+    index: number;
+    dispatch: Dispatch<UnknownAction>
     State: State;
     constructor(props: any) {
         super(props);
         this.index = props.index;
-        this.command = new Command({
-            dispatch: props.dispatch,
-        });
-        this.State = this.returnState()
+
+        this.dispatch = props.dispatch,
+
+            this.State = this.returnState()
     }
     protected checkingGoToNextPage(arrayOfBindings: any[]): void {
-        this.command.update(setIsPressedNextButtonAuthorization, false);
-        this.command.update(
-            setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-            true
+        this.dispatch(setIsPressedNextButtonAuthorization(false));
+        this.dispatch(
+            setFulfillmentOfTheConditionForTheNextButtonAuthorization(
+                true)
         );
     }
     protected checkingForEnableButton(arrayOfBindings: any[]) {
@@ -30,7 +31,7 @@ export abstract class RegistrationPage extends Component {
         return new State({
             checkingForEnableButton: this.checkingForEnableButton,
             checkingGoToNextPage: this.checkingGoToNextPage,
-            command: this.command
+            dispatch: this.dispatch
         })
     }
 }

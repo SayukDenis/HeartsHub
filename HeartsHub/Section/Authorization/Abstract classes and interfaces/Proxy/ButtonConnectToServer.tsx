@@ -9,6 +9,7 @@ import {
   width,
 } from "../../../../SemiComponents/Constants/SizeConstants";
 import { selectBufferEmail } from "../../../../redux/Authorization/selectors";
+import InvokerState from "../Command/InvokerState";
 
 interface ButtonConnectToServerProps {
   setModalWindow: (state: boolean | null) => void;
@@ -22,7 +23,14 @@ const ButtonConnectToServer: React.FC<ButtonConnectToServerProps> = ({
     <TouchableOpacity
       onPress={() => {
         setModalWindow(null);
-        dispatch(setEmailForAuthorization(bufferEmail));
+        const invokerState: InvokerState = new InvokerState({
+          dispatch: dispatch,
+          action: setEmailForAuthorization,
+          variableField: bufferEmail,
+          attribute: "email",
+          isAuthorized: false,
+        });
+        invokerState.request();
         dispatch(
           setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
         );

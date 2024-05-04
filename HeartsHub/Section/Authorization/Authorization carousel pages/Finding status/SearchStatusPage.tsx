@@ -18,6 +18,7 @@ import {
   setSearchStatusForAuthorization,
 } from "../../../../redux/Authorization/Actions";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class SearchStatusPage extends RegistrationPage {
   constructor(props: any) {
@@ -35,15 +36,19 @@ class SearchStatusPage extends RegistrationPage {
     return arrayOfBindings[0] != null;
   };
   checkingGoToNextPage = (arrayOfBindings: any[]) => {
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(
-      setSearchStatusForAuthorization,
-      searchStatus[arrayOfBindings[0]]
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    const invokerState: InvokerState= new InvokerState({
+      dispatch: this.dispatch,
+      action: setSearchStatusForAuthorization,
+      variableField: searchStatus[arrayOfBindings[0]],
+      attribute: "searchStatus",
+      isAuthorized: false,
+    });
+    invokerState.request();
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
-    );
+
   };
   componentDidUpdate(prevProps: any, props: any) {
     const { page, index }: any = this.props;

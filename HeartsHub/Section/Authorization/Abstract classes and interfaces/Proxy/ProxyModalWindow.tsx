@@ -5,11 +5,14 @@ import { height, width } from "../../../../SemiComponents/Constants/SizeConstant
 import CancelSVG from "../../../../assets/SVG/Main Page SVG/CancelSVG";
 import Command from "../Command/Command";
 import RealModalWindow from "./RealModalWIndow";
+import { Dispatch, UnknownAction } from "redux";
+import { IInvoker } from "../Command/UnauthorizedInvoker";
+import InvokerState from "../Command/InvokerState";
 
 export class ProxyModalWindow implements ISubject {
-    command: Command;
-    constructor(command:Command){
-        this.command=command;
+    dispatch:Dispatch<UnknownAction>
+    constructor(dispatch:Dispatch<UnknownAction>){
+        this.dispatch=dispatch;
     }
   request(
     isCodeVerify: boolean | null,
@@ -85,6 +88,6 @@ export class ProxyModalWindow implements ISubject {
       </Modal>
       );
     }
-    return new RealModalWindow(this.command).request(isCodeVerify, setModalWindow);
+    return new RealModalWindow(this.dispatch).request(isCodeVerify, setModalWindow);
   }
 }

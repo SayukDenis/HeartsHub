@@ -12,11 +12,9 @@ import {
 } from "../../../../SemiComponents/Constants/SizeConstants";
 import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTitle";
 import AuthorizationInput from "../../../../SemiComponents/Inputs/AuthorizationInput";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import {
   setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-  setIsEnableNextButtonAuthorization,
-  setIsPressedNextButtonAuthorization,
   setNameForAuthorization,
   setSurnameForAuthorization,
 } from "../../../../redux/Authorization/Actions";
@@ -26,63 +24,77 @@ import {
   selectNameForAuthorization,
   selectSurnameForAuthorization,
 } from "../../../../redux/Authorization/selectors";
-import Command from "../../Abstract classes and interfaces/Command/Command";
-import { State } from "../../Abstract classes and interfaces/State/State";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
 import { isValidNameCheck } from "./isValidNameCheck";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class EnterNameAndSurnamePage extends RegistrationPage {
-
   private inputRef: RefObject<TextInput>;
   constructor(props: any) {
     super(props);
+
     this.state = {
       inputName: props.name,
       inputSurName: props.surname,
     };
     this.inputRef = createRef();
-    this.State = this.returnState()
+    this.State = this.returnState();
   }
-  
-  checkingForEnableButton= (arrayOfBindings: any[]) => {
+
+  checkingForEnableButton = (arrayOfBindings: any[]) => {
     const validName = isValidNameCheck(arrayOfBindings[0]);
     const validSurName =
       isValidNameCheck(arrayOfBindings[1]) || arrayOfBindings[1] == "";
     const isValid = validName && validSurName;
     return isValid;
-  }
-  checkingGoToNextPage= (arrayOfBindings: any[]) => {
+  };
+  checkingGoToNextPage = (arrayOfBindings: any[]) => {
     const validName = isValidNameCheck(arrayOfBindings[0]);
     const validSurName =
       isValidNameCheck(arrayOfBindings[1]) || arrayOfBindings[1] == "";
     const isValid = validName && validSurName;
     if (isValid) {
-      this.command.update(setNameForAuthorization, arrayOfBindings[0]);
-      this.command.update(setSurnameForAuthorization, arrayOfBindings[1]);
+      const invokerState1: InvokerState = new InvokerState({
+        dispatch: this.dispatch,
+        action: setNameForAuthorization,
+        variableField: arrayOfBindings[0],
+        attribute: "name",
+        isAuthorized: false,
+      });
+      invokerState1.request();
+      const invokerState2: InvokerState = new InvokerState({
+        dispatch: this.dispatch,
+        action: setSurnameForAuthorization,
+        variableField: arrayOfBindings[1],
+        attribute: "surname",
+        isAuthorized: false,
+      });
+      setTimeout(() => {
+        invokerState2.request();
+      }, 10);
     }
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      isValid
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(isValid)
     );
-  }
+  };
   componentDidMount(): void {
     const { page, index }: any = this.props;
     if (page == index + 1) {
       this.defineState();
-      this.inputRef.current?.focus()
+      this.inputRef.current?.focus();
     }
   }
   componentDidUpdate(prevProps: any, props: any) {
     const { page, index }: any = this.props;
-    const oldPage= prevProps.page
+    const oldPage = prevProps.page;
     if (page == index + 1) {
       this.defineState();
     }
-    if(page!=oldPage&&page == index + 1){
-      setTimeout(()=>{this.inputRef.current?.focus()},50)
-   
+    if (page != oldPage && page == index + 1) {
+      setTimeout(() => {
+        this.inputRef.current?.focus();
+      }, 50);
     }
-
   }
   defineState = () => {
     const { isPressedNextButtonAuthorization }: any = this.props;
@@ -91,7 +103,6 @@ class EnterNameAndSurnamePage extends RegistrationPage {
       [inputName, inputSurName],
       isPressedNextButtonAuthorization as boolean
     );
-    
   };
   render() {
     return (

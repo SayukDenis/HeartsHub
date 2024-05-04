@@ -20,6 +20,7 @@ import {
 } from "../../../../redux/Authorization/selectors";
 
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class AskAboutChildrenPage extends RegistrationPage {
   constructor(props: any) {
@@ -30,11 +31,17 @@ class AskAboutChildrenPage extends RegistrationPage {
     this.State = this.returnState();
   }
   checkingGoToNextPage(arrayOfBindings: any[]) {
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(setChildrenStatusForAuthorization, arrayOfBindings[0]);
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    const invokerState: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setChildrenStatusForAuthorization,
+      variableField: arrayOfBindings[0],
+      attribute: "childrenStatus",
+      isAuthorized: false,
+    });
+    invokerState.request();
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
   }
   checkingForEnableButton(arrayOfBindings: any[]) {

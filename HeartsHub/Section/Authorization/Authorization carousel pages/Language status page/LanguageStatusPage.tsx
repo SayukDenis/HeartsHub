@@ -26,6 +26,7 @@ import {
 } from "../../../../redux/Authorization/Actions";
 import MagnifyingGlassSVG from "../../../../assets/SVG/Authorization SVG/MagnifyingGlassSVG";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class LanguageStatusPage extends RegistrationPage {
   constructor(props: any) {
@@ -61,12 +62,19 @@ class LanguageStatusPage extends RegistrationPage {
     );
   }
   checkingGoToNextPage= (arrayOfBindings: any[]) => {
-    this.command.update(setLanguagesForAuthorization, arrayOfBindings[1]);
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    const invokerState: InvokerState= new InvokerState({
+      dispatch: this.dispatch,
+      action: setLanguagesForAuthorization,
+      variableField: arrayOfBindings[1],
+      attribute: "languages",
+      isAuthorized: false,
+    });
+    invokerState.request();
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
+
   }
   getFirstChar = (index: number) => {
     const char = "";

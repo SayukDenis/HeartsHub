@@ -1,14 +1,11 @@
 import { View } from "react-native";
-import { connect} from "react-redux";
+import { connect } from "react-redux";
 import {
   height,
   width,
 } from "../../../../SemiComponents/Constants/SizeConstants";
 import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTitle";
-import {
-  alcoholStatus,
-
-} from "../../../../SemiComponents/Constants/Data";
+import { alcoholStatus } from "../../../../SemiComponents/Constants/Data";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DefaultSelectButton from "../../../../SemiComponents/Buttons/Authorization buttons/DefaultSelectButton";
 import {
@@ -22,7 +19,7 @@ import {
   selectIsPressedNextButtonAuthorization,
 } from "../../../../redux/Authorization/selectors";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
-
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class AlcoholStatusPage extends RegistrationPage {
   constructor(props: any) {
@@ -30,20 +27,23 @@ class AlcoholStatusPage extends RegistrationPage {
     this.state = {
       selectedAlcoholStatus: (this.props as any).alcoholStatus,
     };
-    this.State = this.returnState()
+    this.State = this.returnState();
   }
   checkingGoToNextPage(arrayOfBindings: any[]) {
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(
-      setAlcoholStatusForAuthorization,
-      arrayOfBindings[0]
-    );
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    const invokerState: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setAlcoholStatusForAuthorization,
+      variableField: arrayOfBindings[0],
+      attribute: "alcoholStatus",
+      isAuthorized: false,
+    });
+    invokerState.request();
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
   }
-  checkingForEnableButton(arrayOfBindings: any[])  {
+  checkingForEnableButton(arrayOfBindings: any[]) {
     return arrayOfBindings[0] != "";
   }
   componentDidMount() {

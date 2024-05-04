@@ -1,4 +1,4 @@
-import { View, StatusBar, Text, AppRegistry } from "react-native";
+import { View, StatusBar,  AppRegistry } from "react-native";
 import Navigation from "./Navigation/Navigation";
 import { Provider } from "react-redux";
 import { store } from "./redux/store/store";

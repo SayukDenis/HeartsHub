@@ -22,9 +22,7 @@ import {
   selectSearchStatusRadius,
 } from "../../../../redux/Authorization/selectors";
 import { connect } from "react-redux";
-import {
-  searchGender,
-} from "../../../../SemiComponents/Constants/Data";
+import { searchGender } from "../../../../SemiComponents/Constants/Data";
 import {
   setFulfillmentOfTheConditionForTheNextButtonAuthorization,
   setIsEnableNextButtonAuthorization,
@@ -33,6 +31,7 @@ import {
   setSearchStatusGender,
   setSearchStatusRadius,
 } from "../../../../redux/Authorization/Actions";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class SearchSettingsPage extends RegistrationPage {
   private inputRef: RefObject<TextInput>;
@@ -54,17 +53,41 @@ class SearchSettingsPage extends RegistrationPage {
     this.State = this.returnState();
   }
   protected checkingGoToNextPage = (arrayOfBindings: any[]) => {
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(
-      setSearchStatusAge,
-      `${arrayOfBindings[2]}-${arrayOfBindings[1]}`
-    );
-    this.command.update(setSearchStatusGender, arrayOfBindings[3]);
-    this.command.update(setSearchStatusRadius, arrayOfBindings[0]);
-    this.command.update(setIsEnableNextButtonAuthorization, false);
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    const invokerState3: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setSearchStatusRadius,
+      variableField: arrayOfBindings[0],
+      attribute: "searchRadius",
+      isAuthorized: false,
+    });
+
+    const invokerState2: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setSearchStatusGender,
+      variableField: arrayOfBindings[3],
+      attribute: "searchGender",
+      isAuthorized: false,
+    });
+
+    const invokerState1: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setSearchStatusAge,
+      variableField: `${arrayOfBindings[2]}-${arrayOfBindings[1]}`,
+      attribute: "searchAge",
+      isAuthorized: false,
+    });
+
+    invokerState1.request();
+    setTimeout(() => {
+      invokerState2.request();
+      setTimeout(() => {
+        invokerState3.request()
+      }, 10);
+    }, 10);
+    this.dispatch(setIsEnableNextButtonAuthorization(false));
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
   };
   componentDidMount() {

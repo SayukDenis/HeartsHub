@@ -1,8 +1,4 @@
-import React, {
-  RefObject,
-  createRef,
-
-} from "react";
+import React, { RefObject, createRef } from "react";
 import {
   Text,
   View,
@@ -17,7 +13,7 @@ import {
 } from "../../../../SemiComponents/Constants/SizeConstants";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import CheckBoxSVG from "../../../../assets/SVG/Authorization SVG/CheckBoxSVG";
-import { connect} from "react-redux";
+import { connect } from "react-redux";
 import {
   selectAuthorizationPage,
   selectHeightForAuthorization,
@@ -29,6 +25,7 @@ import {
   setIsPressedNextButtonAuthorization,
 } from "../../../../redux/Authorization/Actions";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class EnteringYourHeightPage extends RegistrationPage {
   private inputRef: RefObject<TextInput>;
@@ -36,7 +33,7 @@ class EnteringYourHeightPage extends RegistrationPage {
   private sliderLength = width * 0.7;
   constructor(props: any) {
     super(props);
-    const {yourHeight}:any=this.props
+    const { yourHeight }: any = this.props;
     const [numberValue, booleanValue] = (this.props as any).yourHeight
       .split(",")
       .map((val: any, index: any) => {
@@ -52,15 +49,21 @@ class EnteringYourHeightPage extends RegistrationPage {
       toggleState: booleanValue,
     };
     this.inputRef = createRef();
-    this.State=this.returnState()
+    this.State = this.returnState();
   }
 
   checkingGoToNextPage = (arrayOfBindings: any[]) => {
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(setHeigthForAuthorization, this.validHeight());
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    const invokerState: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setHeigthForAuthorization,
+      variableField: this.validHeight(),
+      attribute: "height",
+      isAuthorized: false,
+    });
+    invokerState.request();
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
   };
   char = (value: number) => {

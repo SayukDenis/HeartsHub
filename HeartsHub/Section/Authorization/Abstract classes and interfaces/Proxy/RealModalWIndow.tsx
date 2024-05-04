@@ -12,11 +12,12 @@ import Command from "../Command/Command";
 import CheckBoxSVG from "../../../../assets/SVG/Authorization SVG/CheckBoxSVG";
 import { selectBufferEmail } from "../../../../redux/Authorization/selectors";
 import ButtonConnectToServer from "./ButtonConnectToServer";
+import { Dispatch, UnknownAction } from "redux";
 
 class RealModalWindow implements ISubject {
-  command: Command;
-  constructor(command: Command) {
-    this.command = command;
+  dispatch: Dispatch<UnknownAction>;
+  constructor(dispatch: Dispatch<UnknownAction>) {
+    this.dispatch = dispatch;
   }
   request(
     isCodeVerify: boolean | null,
@@ -80,6 +81,5 @@ class RealModalWindow implements ISubject {
     );
   }
 }
-
 
 export default RealModalWindow;

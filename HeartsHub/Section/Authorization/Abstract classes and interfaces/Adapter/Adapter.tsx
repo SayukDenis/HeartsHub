@@ -8,7 +8,6 @@ interface AdapterProps {
 
 class Adapter extends AdaptedRegistrationPage {
 
-  additionalProps: any;
 
   constructor(props: AdapterProps) {
     super(props);

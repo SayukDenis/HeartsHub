@@ -22,3 +22,4 @@ export const selectSearchStatusGender = (state: any) => state.authorizationForm.
 export const selectSecondPassword = (state: any) => state.authorizationForm.secondPassword;
 export const selectGeoLocation = (state: any) => state.authorizationForm.geoLocation;
 export const selectBufferEmail = (state: any) => state.bufferEmail
+export const selectAuthForm=(state:any)=>state.authorizationForm

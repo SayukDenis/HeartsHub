@@ -16,6 +16,7 @@ import AuthorizationButton from "../../../../SemiComponents/Buttons/Authorizatio
 import { useDispatch, useSelector } from "react-redux";
 import { selectLinkToPhotoForAuthorization } from "../../../../redux/Authorization/selectors";
 import { setLinkToPhotoForAuthorization } from "../../../../redux/Authorization/Actions";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 interface GalleryModalWindowProps {
   index: number;
   gallery: boolean;
@@ -104,6 +105,14 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
         values.filter((value) => value !== undefined)
       )
     );
+    const invokerState: InvokerState = new InvokerState({
+      dispatch,
+      action: setLinkToPhotoForAuthorization,
+      variableField: values.filter((value) => value !== undefined),
+      attribute: "linkToPhoto",
+      isAuthorized: false,
+    });
+    invokerState.request();
     setGallery(false);
     setPressedPage(null);
     setPhotoLibrary({});

@@ -11,7 +11,6 @@ import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTi
 import { connect } from "react-redux";
 import {
   setBufferEmail,
-  setEmailForAuthorization,
   setFulfillmentOfTheConditionForTheNextButtonAuthorization,
   setIsEnableNextButtonAuthorization,
   setIsPressedNextButtonAuthorization,
@@ -24,8 +23,6 @@ import {
 } from "../../../../redux/Authorization/selectors";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
 import { isValidEmailCheck } from "./isValidEmailCheck";
-import { bufferEmailReducer } from "../../../../redux/Authorization/Reducer";
-
 class EnteringAnEmailAddressPage extends RegistrationPage {
   private inputRef: RefObject<TextInput>;
   constructor(props: any) {
@@ -40,12 +37,11 @@ class EnteringAnEmailAddressPage extends RegistrationPage {
     return isValidEmailCheck(arrayOfBindings[0]);
   };
   protected checkingGoToNextPage = (arrayOfBindings: any[]) => {
-    this.command.update(setBufferEmail, arrayOfBindings[0]);
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(setIsEnableNextButtonAuthorization, false);
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    this.dispatch(setBufferEmail(arrayOfBindings[0]));
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    this.dispatch(setIsEnableNextButtonAuthorization(false));
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
   };
   componentDidMount() {
@@ -149,4 +145,5 @@ const mapStateToProps = (state: any) => ({
     selectIsPressedNextButtonAuthorization(state),
   page: selectAuthorizationPage(state),
 });
+//console.log(connect(mapStateToProps)(EnteringAnEmailAddressPage))
 export default connect(mapStateToProps)(EnteringAnEmailAddressPage);

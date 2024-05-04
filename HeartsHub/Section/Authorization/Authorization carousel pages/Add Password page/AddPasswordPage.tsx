@@ -26,6 +26,7 @@ import {
   hasUpperCase,
   hasWhitespace,
 } from "./Functions";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class AddPasswordPage extends RegistrationPage {
   private inputRef: RefObject<TextInput>;
@@ -51,12 +52,17 @@ class AddPasswordPage extends RegistrationPage {
   protected checkingGoToNextPage = (arrayOfBindings: any[]) => {
     const { secondPassword }: any = this.props;
 
-    this.command.update(setSecondPassword, arrayOfBindings[0]);
-
-    this.command.update(setIsEnableNextButtonAuthorization, false);
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    const invokerState: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setSecondPassword,
+      variableField: arrayOfBindings[0],
+      attribute: "secondPassword",
+      isAuthorized: false,
+    });
+    invokerState.request();
+    this.dispatch(setIsEnableNextButtonAuthorization(false));
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
   };
   componentDidMount() {

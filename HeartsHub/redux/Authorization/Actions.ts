@@ -1,3 +1,6 @@
+
+import { AuthorizationForm } from "../../Section/Authorization/Other/Data types/Interfaces";
+
 export const setIsPressedNextButtonAuthorization = (isPressed: boolean) => ({
   type: 'SET_IS_PRESSED_NEXT_BUTTON_AUTHORIZATION',
   payload: isPressed,
@@ -110,3 +113,7 @@ export const setSecondPassword = (secondPassword: string) => ({
   type: 'SET_SECOND_PASSWORD',
   payload: secondPassword,
 });
+export const setAuthForm=(authForm:AuthorizationForm)=>({
+  type:"SET_AUTH_FORM",
+  payload:authForm
+})

@@ -21,6 +21,7 @@ import CheckBoxSVG from "../../../../assets/SVG/Authorization SVG/CheckBoxSVG";
 import { getZodiacSign } from "../../../../SemiComponents/Constants/Functions/Zodiac";
 import { isValidDate } from "./FunctionsForDataValidate";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class EnteringBirthdayPage extends RegistrationPage {
   private inputDayRef: RefObject<TextInput>;
@@ -68,21 +69,26 @@ class EnteringBirthdayPage extends RegistrationPage {
         Number(arrayOfBindings[2])
       );
     if (isValid) {
-      this.command.update(setIsPressedNextButtonAuthorization, false);
-      this.command.update(
-        setDateForAuthorization,
+      this.dispatch(setIsPressedNextButtonAuthorization(false));
+      const correctdata: string =
         arrayOfBindings[2] +
-          "-" +
-          arrayOfBindings[1].padStart(2, "0") +
-          "-" +
-          arrayOfBindings[0].padStart(2, "0") +
-          "," +
-          (arrayOfBindings[3] ? 1 : 0)
-      );
+        "-" +
+        arrayOfBindings[1].padStart(2, "0") +
+        "-" +
+        arrayOfBindings[0].padStart(2, "0") +
+        "," +
+        (arrayOfBindings[3] ? 1 : 0);
+      const invokerState: InvokerState = new InvokerState({
+        dispatch: this.dispatch,
+        action: setDateForAuthorization,
+        variableField: correctdata,
+        attribute: "date",
+        isAuthorized: false,
+      });
+      invokerState.request();
     }
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      isValid
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(isValid)
     );
   };
   componentDidMount(): void {

@@ -1,21 +1,12 @@
-import React, {
-  RefObject,
-  createRef,
-} from "react";
-import {
-
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { RefObject, createRef } from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import {
   height,
   width,
 } from "../../../../SemiComponents/Constants/SizeConstants";
 import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTitle";
 import AuthorizationInput from "../../../../SemiComponents/Inputs/AuthorizationInput";
-import { connect} from "react-redux";
+import { connect } from "react-redux";
 import {
   selectAuthorizationPage,
   selectIsPressedNextButtonAuthorization,
@@ -24,10 +15,11 @@ import {
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
 import Command from "../../Abstract classes and interfaces/Command/Command";
 import { ProxyModalWindow } from "../../Abstract classes and interfaces/Proxy/ProxyModalWindow";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
+import { setBufferEmail } from "../../../../redux/Authorization/Actions";
 
 class VerifyCodePage extends RegistrationPage {
   private inputRef: RefObject<TextInput>;
-
   constructor(props: any) {
     super(props);
     this.state = {
@@ -36,16 +28,13 @@ class VerifyCodePage extends RegistrationPage {
       isValid: null,
     };
     this.inputRef = createRef();
-    this.command = new Command({
-      dispatch: props.dispatch,
-    });
     this.State = this.returnState();
   }
-  checkingForEnableButton= (arrayOfBindings: any[]) => {
+  checkingForEnableButton = (arrayOfBindings: any[]) => {
     const isValid = arrayOfBindings[0].length == arrayOfBindings[1].length;
     return isValid;
-  }
-  checkingGoToNextPage= (arrayOfBindings: any[]) => {
+  };
+  checkingGoToNextPage = (arrayOfBindings: any[]) => {
     const isValid = arrayOfBindings[0] === arrayOfBindings[1];
     this.setState({ isValid });
     this.setState({ inputCode: "" });
@@ -53,7 +42,7 @@ class VerifyCodePage extends RegistrationPage {
       this.inputRef.current?.focus();
       return;
     }
-  }
+  };
   componentDidUpdate(prevProps: any, props: any) {
     const { page, index }: any = this.props;
     const prevPage = prevProps.page;
@@ -67,7 +56,7 @@ class VerifyCodePage extends RegistrationPage {
   defineState = () => {
     const { isPressedNextButtonAuthorization }: any = this.props;
     const { inputCode, verifyCode }: any = this.state;
-    if(isPressedNextButtonAuthorization){
+    if (isPressedNextButtonAuthorization) {
       this.inputRef.current?.blur();
     }
     this.State.defineState(
@@ -79,11 +68,7 @@ class VerifyCodePage extends RegistrationPage {
     const { isValid }: any = this.state;
     return (
       <View style={{ width }}>
-        {new ProxyModalWindow(
-          new Command({
-            dispatch: (this.props as any).dispatch,
-          })
-        ).request(isValid, (state) => {
+        {new ProxyModalWindow(this.dispatch ).request(isValid, (state) => {
           this.setState({ isValid: state });
         })}
 

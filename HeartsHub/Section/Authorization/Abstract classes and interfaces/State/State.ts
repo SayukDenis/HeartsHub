@@ -1,5 +1,6 @@
 import Command from "../Command/Command";
 import { setIsEnableNextButtonAuthorization, setIsPressedNextButtonAuthorization } from "../../../../redux/Authorization/Actions";
+import { Dispatch, UnknownAction } from "redux";
 
 
 interface IState {
@@ -8,20 +9,20 @@ interface IState {
 interface StateProps {
     checkingForEnableButton: (arrayOfBindings: any[]) => boolean;
     checkingGoToNextPage: (arrayOfBindings: any[]) => void;
-    command: Command;
+    dispatch: Dispatch<UnknownAction>
 }
 
 export class State implements IState {
     checkingForEnableButton: (arrayOfBindings: any[]) => boolean;
     checkingGoToNextPage: (arrayOfBindings: any[]) => void;
-    command: Command
+    dispatch: Dispatch<UnknownAction>
     constructor(props: StateProps) {
         this.checkingForEnableButton = props.checkingForEnableButton;
         this.checkingGoToNextPage = props.checkingGoToNextPage;
-        this.command = props.command;
+        this.dispatch = props.dispatch
     }
     defineState(arrayOfBindings: any[], isPressedNextButtonAuthorization: boolean) {
-       
+
         if (isPressedNextButtonAuthorization) {
             this.goToNextButton(arrayOfBindings)
         }
@@ -31,17 +32,18 @@ export class State implements IState {
     private setEnableButton(arrayOfBindings: any[]) {
         const isValid = this.checkingForEnableButton(arrayOfBindings);
         if (isValid) {
-            this.command.update(setIsEnableNextButtonAuthorization, true)
+            
+            this.dispatch(setIsEnableNextButtonAuthorization(true))
         }
         else {
-            this.command.update(setIsEnableNextButtonAuthorization, false)
+            this.dispatch(setIsEnableNextButtonAuthorization(false))
         }
         return isValid;
     }
     private goToNextButton(arrayOfBindings: any[]) {
-        this.command.update(setIsPressedNextButtonAuthorization, false);
+        this.dispatch(setIsPressedNextButtonAuthorization(false));
         if (this.setEnableButton(arrayOfBindings)) {
-            
+
             this.checkingGoToNextPage(arrayOfBindings);
         }
 

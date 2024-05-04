@@ -27,6 +27,7 @@ import Command from "../../Authorization/Abstract classes and interfaces/Command
 import { IStrategy } from "../../Authorization/Abstract classes and interfaces/Strategy/Strategy";
 import ControlPanelForSettingsCarousel from "./ControlPanelForSettingsCarousel";
 import Header from "./Header";
+import { Dispatch, UnknownAction } from "redux";
 
 interface SettingsCategoryCarouselProps {
   listOfPages: AdaptedRegistrationPage[];
@@ -39,14 +40,13 @@ class SettingsCategoryCarousel
 {
   listOfPages: AdaptedRegistrationPage[];
   scrollViewRef: RefObject<ScrollView> = createRef<ScrollView>();
-  private command: Command;
+  private dispatch: Dispatch<UnknownAction>;
   constructor(props: any) {
     super(props);
     this.listOfPages = props.listOfPages;
-    this.command = new Command({
-      dispatch: props.dispatch,
-    });
-    this.command.update(setSelectedAuthorizationPage, this.props.id + 1);
+
+    (this.dispatch = props.dispatch),
+      this.dispatch(setSelectedAuthorizationPage(this.props.id + 1));
   }
   pressOnBackButton = () => {
     this.getNewArray(1, this.props.listOfPages);
@@ -64,7 +64,7 @@ class SettingsCategoryCarousel
 
       this.listOfPages.pop();
       this.listOfPages.unshift(startArray[newElement]);
-      this.command.update(setSelectedAuthorizationPage, newPage);
+      this.dispatch(setSelectedAuthorizationPage(newPage));
 
       this.scrollViewRef.current?.scrollTo({ x: 3 * width, animated: false });
       this.scrollViewRef.current?.scrollTo({ x: 2 * width, animated: true });
@@ -73,9 +73,8 @@ class SettingsCategoryCarousel
       this.listOfPages.shift();
       const newElement: number = (page + 2) % startArray.length;
       this.listOfPages.push(startArray[newElement]);
-      this.command.update(
-        setSelectedAuthorizationPage,
-        (page % startArray.length) + 1
+      this.dispatch(
+        setSelectedAuthorizationPage((page % startArray.length) + 1)
       );
 
       this.scrollViewRef.current?.scrollTo({ x: 1 * width, animated: false });
@@ -107,7 +106,7 @@ class SettingsCategoryCarousel
     }
   };
   pressOnConfirmButton = () => {
-    this.command.update(setIsPressedNextButtonAuthorization, true);
+    this.dispatch(setIsPressedNextButtonAuthorization( true));
   };
   componentDidUpdate(prevProps: any) {
     const { fulfillmentOfConditionForNextButtonAuthorization }: any =
@@ -135,7 +134,7 @@ class SettingsCategoryCarousel
     const { isEnableNextButtonAuthorization }: any = this.props;
     return (
       <BackGroundGradientView>
-        <Header/>
+        <Header />
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={{ height }}>
             <ScrollView

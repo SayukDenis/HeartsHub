@@ -52,12 +52,11 @@ class SupportPage extends RegistrationPage {
     return photo != "" && input.trim().length > 0;
   };
   protected checkingGoToNextPage = (arrayOfBindings: any[]) => {
-    this.command.update(setIsPressedNextButtonAuthorization, false);
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
 
-    this.command.update(setIsEnableNextButtonAuthorization, false);
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
+    this.dispatch(setIsEnableNextButtonAuthorization(false));
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
   };
   componentDidMount() {

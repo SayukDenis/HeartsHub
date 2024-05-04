@@ -5,7 +5,7 @@ import {
   width,
 } from "../../../../SemiComponents/Constants/SizeConstants";
 import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTitle";
-import { connect} from "react-redux";
+import { connect } from "react-redux";
 
 import {
   selectAuthorizationPage,
@@ -20,6 +20,7 @@ import {
   setSexualOrientationForAuthorization,
 } from "../../../../redux/Authorization/Actions";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class IntroductionOfSexualOrientationPage extends RegistrationPage {
   constructor(props: any) {
@@ -38,14 +39,18 @@ class IntroductionOfSexualOrientationPage extends RegistrationPage {
     return arrayOfBindings[0] != null;
   };
   checkingGoToNextPage = (arrayOfBindings: any[]) => {
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(
-      setSexualOrientationForAuthorization,
-      arrayOfBindings[0] != null ? sexualOrientations[arrayOfBindings[0]] : ""
-    );
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      arrayOfBindings[0] != null
+    const invokerState: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setSexualOrientationForAuthorization,
+      variableField: sexualOrientations[arrayOfBindings[0]],
+      attribute: "sexualOrientation",
+      isAuthorized: false,
+    });
+    invokerState.request();
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(
+        arrayOfBindings[0] != null
+      )
     );
   };
   componentDidMount() {

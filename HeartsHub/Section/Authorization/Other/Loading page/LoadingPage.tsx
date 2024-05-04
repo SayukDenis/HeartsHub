@@ -7,8 +7,13 @@ import {
   width,
 } from "../../../../SemiComponents/Constants/SizeConstants";
 import HeartsHubIconSVG from "../../../../assets/SVG/Semi SVG/HeartsHubIconSVG";
+import { useDispatch } from "react-redux";
+import { getAuthObjectFromDao, initializationdao } from "../../../../Local dao/Initialiazation";
 
 const LoadingPage = () => {
+  const dispatch=useDispatch()
+  initializationdao()
+  getAuthObjectFromDao(dispatch)
   const [isModalWindowVisible, setIsModalWindowVisible] = useState(true);
   const widthOfSvg = width * 0.1;
   const radiusOfLoading = width * 0.15;

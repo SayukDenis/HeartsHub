@@ -18,6 +18,7 @@ import {
   setSelfInformationForAuthorization,
 } from "../../../../redux/Authorization/Actions";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
+import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 
 class SelfInformationPage extends RegistrationPage {
   private inputRef: RefObject<TextInput>;
@@ -34,15 +35,19 @@ class SelfInformationPage extends RegistrationPage {
   }
  
   checkingGoToNextPage= (arrayOfBindings: any[]) => {
-    this.command.update(
-      setSelfInformationForAuthorization,
-      arrayOfBindings[0].trim()
+    this.dispatch(setIsPressedNextButtonAuthorization(false));
+    const invokerState: InvokerState = new InvokerState({
+      dispatch: this.dispatch,
+      action: setSelfInformationForAuthorization,
+      variableField: arrayOfBindings[0].trim(),
+      attribute: "selfInformation",
+      isAuthorized: false,
+    });
+    invokerState.request();
+    this.dispatch(
+      setFulfillmentOfTheConditionForTheNextButtonAuthorization(true)
     );
-    this.command.update(setIsPressedNextButtonAuthorization, false);
-    this.command.update(
-      setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-      true
-    );
+    
   }
   componentDidMount() {
     const { page, index }: any = this.props;

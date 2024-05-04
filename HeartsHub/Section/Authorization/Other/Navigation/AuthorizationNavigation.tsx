@@ -6,7 +6,7 @@ import SignInOrSignUpPage from "../../Authorization carousel page/Sign in or sig
 const AuthorizationNavigation = () => {
   return (
     <Stack.Navigator
-      initialRouteName="MainCarouselPageNavigation"
+      initialRouteName="SignInOrSignUpPage"
       screenOptions={{
         headerShown: false,
       }}
