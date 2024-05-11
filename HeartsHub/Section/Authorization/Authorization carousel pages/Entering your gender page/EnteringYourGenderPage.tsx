@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import {
   selectAuthorizationPage,
   selectGenderForAuthorization,
+  selectId,
   selectIsPressedNextButtonAuthorization,
 } from "../../../../redux/Authorization/selectors";
 import GenderAuthorizationButton from "../../../../SemiComponents/Buttons/Authorization buttons/SelectForMulitplyAuthorizationButton";
@@ -43,7 +44,7 @@ class EnteringYourGenderPage extends RegistrationPage {
       action: setGenderForAuthorization,
       variableField: genders[arrayOfBindings[0]],
       attribute: "gender",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
     invokerState.request()
     this.dispatch(
@@ -69,10 +70,10 @@ class EnteringYourGenderPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id}: any = this.props;
     const { selectedGender }: any = this.state;
     this.State.defineState(
-      [selectedGender],
+      [selectedGender,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -155,6 +156,7 @@ class EnteringYourGenderPage extends RegistrationPage {
   }
 }
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   gender: selectGenderForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

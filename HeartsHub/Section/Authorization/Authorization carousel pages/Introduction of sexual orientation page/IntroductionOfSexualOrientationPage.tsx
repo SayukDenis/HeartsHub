@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 
 import {
   selectAuthorizationPage,
+  selectId,
   selectIsPressedNextButtonAuthorization,
   selectSexualOrientationForAuthorization,
 } from "../../../../redux/Authorization/selectors";
@@ -44,7 +45,7 @@ class IntroductionOfSexualOrientationPage extends RegistrationPage {
       action: setSexualOrientationForAuthorization,
       variableField: sexualOrientations[arrayOfBindings[0]],
       attribute: "sexualOrientation",
-      isAuthorized: false,
+      id: arrayOfBindings[arrayOfBindings.length - 1],
     });
     invokerState.request();
     this.dispatch(
@@ -66,11 +67,11 @@ class IntroductionOfSexualOrientationPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization, id }: any = this.props;
     const { selectedSexualOrientation }: any = this.state;
 
     this.State.defineState(
-      [selectedSexualOrientation],
+      [selectedSexualOrientation,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -101,6 +102,7 @@ class IntroductionOfSexualOrientationPage extends RegistrationPage {
   }
 }
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   sexualOrientation: selectSexualOrientationForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

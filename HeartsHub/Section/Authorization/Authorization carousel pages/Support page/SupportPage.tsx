@@ -1,7 +1,6 @@
 import React, { RefObject, createRef } from "react";
-
+import { Image } from "expo-image";
 import {
-  Image,
   ScrollView,
   Text,
   TextInput,

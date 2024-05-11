@@ -9,11 +9,13 @@ import GraphemeSplitter from "grapheme-splitter";
 import { connect } from "react-redux";
 import {
   selectAuthorizationPage,
+  selectId,
   selectIsPressedNextButtonAuthorization,
   selectSelfInformationForAuthorization,
 } from "../../../../redux/Authorization/selectors";
 import {
   setFulfillmentOfTheConditionForTheNextButtonAuthorization,
+  setId,
   setIsPressedNextButtonAuthorization,
   setSelfInformationForAuthorization,
 } from "../../../../redux/Authorization/Actions";
@@ -41,7 +43,7 @@ class SelfInformationPage extends RegistrationPage {
       action: setSelfInformationForAuthorization,
       variableField: arrayOfBindings[0].trim(),
       attribute: "selfInformation",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
     invokerState.request();
     this.dispatch(
@@ -68,10 +70,10 @@ class SelfInformationPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
     const { inputBio }: any = this.state;
     this.State.defineState(
-      [inputBio],
+      [inputBio,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -162,6 +164,7 @@ class SelfInformationPage extends RegistrationPage {
 }
 
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   selfInfo: selectSelfInformationForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

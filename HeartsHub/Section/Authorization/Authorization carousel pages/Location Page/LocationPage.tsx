@@ -25,6 +25,7 @@ import {
 import {
   selectAuthorizationPage,
   selectGeoLocation,
+  selectId,
   selectIsPressedNextButtonAuthorization,
 } from "../../../../redux/Authorization/selectors";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
@@ -66,7 +67,7 @@ class LocationPage extends RegistrationPage {
       action: setGeoLocation,
       variableField: index,
       attribute: "geoLocation",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
     invokerState.request()
   };
@@ -102,11 +103,11 @@ class LocationPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
     const { selectLocation }: any = this.state;
 
     this.State.defineState(
-      [selectLocation],
+      [selectLocation,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -259,6 +260,7 @@ const style = StyleSheet.create({
   },
 });
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   geoLocation: selectGeoLocation(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

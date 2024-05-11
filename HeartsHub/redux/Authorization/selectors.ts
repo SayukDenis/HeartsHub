@@ -21,5 +21,6 @@ export const selectSearchStatusRadius = (state: any) => state.authorizationForm.
 export const selectSearchStatusGender = (state: any) => state.authorizationForm.searchGender;
 export const selectSecondPassword = (state: any) => state.authorizationForm.secondPassword;
 export const selectGeoLocation = (state: any) => state.authorizationForm.geoLocation;
+export const selectId=(state:any)=>state.authorizationForm.id;
 export const selectBufferEmail = (state: any) => state.bufferEmail
 export const selectAuthForm=(state:any)=>state.authorizationForm

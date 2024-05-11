@@ -16,6 +16,7 @@ import MultiplySelectContainer from "./MultiplySelectContainer";
 import { connect } from "react-redux";
 import {
   selectAuthorizationPage,
+  selectId,
   selectIsPressedNextButtonAuthorization,
   selectLanguagesForAuthorization,
 } from "../../../../redux/Authorization/selectors";
@@ -68,7 +69,7 @@ class LanguageStatusPage extends RegistrationPage {
       action: setLanguagesForAuthorization,
       variableField: arrayOfBindings[1],
       attribute: "languages",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
     invokerState.request();
     this.dispatch(
@@ -111,10 +112,10 @@ class LanguageStatusPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
     const { languageDictionary, selectLang }: any = this.state;
     this.State.defineState(
-      [languageDictionary, selectLang],
+      [languageDictionary, selectLang,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -299,6 +300,7 @@ class LanguageStatusPage extends RegistrationPage {
   }
 }
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   languageStatus: selectLanguagesForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

@@ -20,6 +20,7 @@ import {
 } from "../../../../redux/Authorization/Actions";
 import {
   selectAuthorizationPage,
+  selectId,
   selectIsPressedNextButtonAuthorization,
   selectNameForAuthorization,
   selectSurnameForAuthorization,
@@ -59,7 +60,7 @@ class EnterNameAndSurnamePage extends RegistrationPage {
         action: setNameForAuthorization,
         variableField: arrayOfBindings[0],
         attribute: "name",
-        isAuthorized: false,
+        id:arrayOfBindings[arrayOfBindings.length-1]
       });
       invokerState1.request();
       const invokerState2: InvokerState = new InvokerState({
@@ -67,7 +68,7 @@ class EnterNameAndSurnamePage extends RegistrationPage {
         action: setSurnameForAuthorization,
         variableField: arrayOfBindings[1],
         attribute: "surname",
-        isAuthorized: false,
+        id:arrayOfBindings[arrayOfBindings.length-1]
       });
       setTimeout(() => {
         invokerState2.request();
@@ -97,10 +98,10 @@ class EnterNameAndSurnamePage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id}: any = this.props;
     const { inputName, inputSurName }: any = this.state;
     this.State.defineState(
-      [inputName, inputSurName],
+      [inputName, inputSurName,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -213,6 +214,7 @@ class EnterNameAndSurnamePage extends RegistrationPage {
 }
 
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   name: selectNameForAuthorization(state),
   surname: selectSurnameForAuthorization(state),
   isPressedNextButtonAuthorization:

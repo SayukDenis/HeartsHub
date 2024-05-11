@@ -16,6 +16,8 @@ import {
 } from "../../../../../SemiComponents/Constants/SizeConstants";
 import CheckBoxSVG from "../../../../../assets/SVG/Authorization SVG/CheckBoxSVG";
 import BackButtonSVG from "../../../../../assets/SVG/Semi SVG/BackButtonSVG";
+import { setIsPressedNextButtonAuthorization } from "../../../../../redux/Authorization/Actions";
+import { useDispatch } from "react-redux";
 
 interface ConfirmButtonProps {
   isConfirmButtonEnabled: boolean;
@@ -30,6 +32,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   showBackButton,
   pressOnBackButton,
 }) => {
+  const dispatch=useDispatch()
   const widthOfModalContainer = width * 0.8;
   const keyboardOffset = useRef(new Animated.Value(-height * 0.06)).current;
   const isFocused = useIsFocused();
@@ -93,6 +96,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
       <TouchableOpacity
         onPress={() => {
           pressOnConfirmButton();
+          dispatch(setIsPressedNextButtonAuthorization(true));
         }}
         disabled={!isConfirmButtonEnabled}
         style={{

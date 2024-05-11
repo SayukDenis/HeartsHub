@@ -12,7 +12,7 @@ import {
   View,
 } from "react-native";
 import * as MediaLibrary from "expo-media-library";
-import { AutoFocus, Camera, CameraType, FlashMode } from "expo-camera";
+import {CameraType, CameraView, FlashMode, useCameraPermissions } from "expo-camera";
 import { Accelerometer } from "expo-sensors";
 import { FlipType, SaveFormat, manipulateAsync } from "expo-image-manipulator";
 import { height, width } from "../../../../SemiComponents/Constants/SizeConstants";
@@ -46,9 +46,9 @@ const CameraModalWindow: React.FC<CameraModalWindowProps> = ({
   const photos = useSelector(selectLinkToPhotoForAuthorization);
   const scrollZoomRef = useRef<ScrollView>(null);
   const horizontalScrollZoomRef = useRef<ScrollView>(null);
-  const [type, setType] = useState(CameraType.front);
-  const [flashMode, setFlashMode] = useState<FlashMode>(FlashMode.off);
-  const cameraRef = useRef<Camera | null>(null);
+  const [type, setType] = useState<CameraType>("front");
+  const [flashMode, setFlashMode] = useState<FlashMode>("off");
+  const cameraRef = useRef<CameraView | null>(null);
   const heightOfCamera = (width / 3) * 4;
   const [zoom, setZoom] = useState(0);
   const [orientation, setOrientation] = useState<number>(0);
@@ -60,7 +60,7 @@ const CameraModalWindow: React.FC<CameraModalWindowProps> = ({
   const [isScrollingForZoomScrollView, setIsScrollingForZoomScrollView] =
     useState<boolean>(false);
   useState<boolean>(false);
-  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [permission, requestPermission] = useCameraPermissions();
 
   const requestPermissionAgain = () => {
     Linking.openSettings();
@@ -97,12 +97,12 @@ const CameraModalWindow: React.FC<CameraModalWindowProps> = ({
     }
   };
   const flipCamera = () => {
-    setType(type === CameraType.back ? CameraType.front : CameraType.back);
+    setType(type === "back" ? "front" : "back");
     zoomTo(1);
   };
   const changeFlashMode = () => {
     setFlashMode((prev: FlashMode) =>
-      prev == FlashMode.on ? FlashMode.off : FlashMode.on
+      prev == "on" ? "off": "on"
     );
   };
   const onBackButtonPress = () => {
@@ -113,9 +113,9 @@ const CameraModalWindow: React.FC<CameraModalWindowProps> = ({
   };
   const handleTakePhoto = async () => {
     if (!cameraRef.current) return;
-
+  
     let photo = await cameraRef.current?.takePictureAsync();
-    if (type === CameraType.front) {
+    if (type === "front") {
       photo = await manipulateAsync(
         photo?.uri || "",
         [
@@ -125,12 +125,18 @@ const CameraModalWindow: React.FC<CameraModalWindowProps> = ({
         { format: SaveFormat.PNG }
       );
     } else if (orientation == 90 || orientation == 270) {
-      photo = await manipulateAsync(photo.uri, [{ rotate: 180 }], {
+      if(!photo){
+        return
+      }
+      photo = await manipulateAsync(photo?.uri, [{ rotate: 180 }], {
         format: SaveFormat.PNG,
       });
     }
     setCamera(false);
-    const asset = await MediaLibrary.createAssetAsync(photo.uri);
+    if(!photo){
+      return
+    }
+    const asset = await MediaLibrary.createAssetAsync(photo?.uri);
     dispatch(
       setLinkToPhotoForAuthorization([
         ...photos.slice(0, index == null ? 0 : index),
@@ -246,7 +252,7 @@ const CameraModalWindow: React.FC<CameraModalWindowProps> = ({
                 // transform: [{ rotate: `${orientation}deg` }],
               }}
             >
-              {flashMode == FlashMode.off ? (
+              {flashMode == "off" ? (
                 <View
                   style={{
                     height: height * 0.03,
@@ -304,14 +310,17 @@ const CameraModalWindow: React.FC<CameraModalWindowProps> = ({
             </TouchableOpacity>
           </View>
         </View>
-        <Camera
+        <CameraView
           style={{
             width: width,
             height: heightOfCamera,
           }}
-          flashMode={flashMode}
-          autoFocus={AutoFocus.on}
-          type={type}
+          
+          flash={flashMode}
+   
+          autofocus={"on"}
+          
+          facing={type}
           ref={cameraRef}
           zoom={zoom}
         />

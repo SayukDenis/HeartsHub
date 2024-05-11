@@ -41,12 +41,13 @@ class SecurityStrategy
 {
   listOfPages: AdaptedRegistrationPage[];
   scrollViewRef: RefObject<ScrollView> = createRef<ScrollView>();
-  private dispatch: Dispatch<UnknownAction>;
+  dispatch: Dispatch<UnknownAction>;
   constructor(props: any) {
     super(props);
     this.listOfPages = props.listOfPages;
-
-    (this.dispatch = props.dispatch), (this.state = { modalWindow: false });
+    this.dispatch = props.dispatch;
+  
+    this.state = { modalWindow: false };
     this.dispatch(setSelectedAuthorizationPage(1));
   }
 
@@ -56,10 +57,12 @@ class SecurityStrategy
     this.scrollViewRef.current?.scrollTo({ x: page - 2, y: 0, animated: true });
   };
   pressOnNextButton() {
-    this.dispatch(setIsPressedNextButtonAuthorization(true));
+    
+    //this.dispatch(setIsPressedNextButtonAuthorization(true));
   }
  
   componentDidUpdate(prevProps: any) {
+      
     const { fulfillmentOfConditionForNextButtonAuthorization, page }: any =
       this.props;
     const old = prevProps.fulfillmentOfConditionForNextButtonAuthorization;
@@ -67,6 +70,7 @@ class SecurityStrategy
       fulfillmentOfConditionForNextButtonAuthorization &&
       old != fulfillmentOfConditionForNextButtonAuthorization
     ) {
+      
       if (this.listOfPages.length == page) {
         this.setState({ modalWindow: true });
       } else {

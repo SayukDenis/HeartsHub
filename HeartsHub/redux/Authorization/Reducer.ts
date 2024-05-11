@@ -3,36 +3,6 @@ import { AuthorizationForm } from "../../Section/Authorization/Other/Data types/
 import { alcoholStatus, childrenStatus, genders, searchGender, searchStatus, sexualOrientations, smokeStatus } from "../../SemiComponents/Constants/Data";
 let initialStateForAuthorizationForm: AuthorizationForm  = initObject
 
-
-/*export const initialStateForAuthorizationForm: AuthorizationForm = {
-  email: 'denisok.77711123@gmail.com',
-  name: 'Денис',
-  surname: 'Саюк',
-  date: '2005-02-20,1',
-  gender: genders[29],
-  sexualOrientation: sexualOrientations[0],
-  height: "187,1",
-  childrenStatus: childrenStatus[0],
-  alcoholStatus: alcoholStatus[0],
-  smokeStatus: smokeStatus[0],
-  languages: [0, 46],
-  searchStatus: searchStatus[0],
-  selfInformation: "Доброго вечора ми бабуїни, слава псу патрону🇺🇦🇺🇦🇺🇦🇺🇦🇺🇦🇺🇦",
-  linkToPhoto:
-    [//'ph://2D3EC47E-021F-4C72-8DC2-233008374565',
-      'ph://D8DA2398-B1B3-41AE-8746-C8B9D8D7999C',
-      'ph://51F64F7C-0EFC-492E-B9DA-934D9747D0D0',
-      'ph://ED2C6251-0389-4410-9721-1AE999D7486E',
-      'ph://4B3D7618-4030-40DA-BE45-8955B8F7A098',
-      'ph://1F25531D-F262-4479-89DF-AB434344A1BB',
-      'ph://1DBBD4BE-1D6B-4854-B814-DBD09A11FC6D',
-    ],
-  searchRadius: "100",
-  searchAge: "18-99",
-  searchGender: searchGender[0],
-  secondPassword: "",
-  geoLocation: 2705
-};*/
 export const isPressedNextButtonAuthorizationReducer = (state = false, action: any) => {
   switch (action.type) {
     case 'SET_IS_PRESSED_NEXT_BUTTON_AUTHORIZATION':
@@ -117,6 +87,8 @@ export const authorizationFormReducer = (state = initialStateForAuthorizationFor
       return { ...state, geoLocation: action.payload }
     case 'SET_SECOND_PASSWORD':
       return { ...state, secondPassword: action.payload }
+    case 'SET_ID':
+      return { ...state, id: action.payload }
     default:
       return state;
   }

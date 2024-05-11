@@ -5,6 +5,7 @@ import { setAuthForm, setEmailForAuthorization } from '../redux/Authorization/Ac
 import { Dispatch, UnknownAction } from 'redux';
 
 export const initObject: AuthorizationForm = {
+    id:"",
     email: "",
     name: '',
     surname: '',
@@ -30,7 +31,7 @@ export const initializationdao = async () => {
   try {
     const existingData = await AsyncStorage.getItem(authFormKey);
 
-    if (existingData === null) {
+    if (existingData === null){
 
       const jsonData = JSON.stringify(initObject)
 

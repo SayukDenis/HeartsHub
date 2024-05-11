@@ -8,7 +8,7 @@ import {
   height,
   width,
 } from "../../../../SemiComponents/Constants/SizeConstants";
-import { selectBufferEmail } from "../../../../redux/Authorization/selectors";
+import { selectBufferEmail, selectId } from "../../../../redux/Authorization/selectors";
 import InvokerState from "../Command/InvokerState";
 
 interface ButtonConnectToServerProps {
@@ -19,6 +19,7 @@ const ButtonConnectToServer: React.FC<ButtonConnectToServerProps> = ({
 }) => {
   const bufferEmail = useSelector(selectBufferEmail);
   const dispatch = useDispatch();
+  const id =useSelector(selectId)
   return (
     <TouchableOpacity
       onPress={() => {
@@ -28,7 +29,7 @@ const ButtonConnectToServer: React.FC<ButtonConnectToServerProps> = ({
           action: setEmailForAuthorization,
           variableField: bufferEmail,
           attribute: "email",
-          isAuthorized: false,
+          id
         });
         invokerState.request();
         dispatch(

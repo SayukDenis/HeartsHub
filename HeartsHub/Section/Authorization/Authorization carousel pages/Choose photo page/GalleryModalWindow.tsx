@@ -1,6 +1,6 @@
-import { Alert, FlatList, Image, Modal, Text, View } from "react-native";
+import { Alert, FlatList, Modal, Text, View } from "react-native";
+import { Image } from "expo-image";
 import BackGroundGradinetView from "../../../../SemiComponents/BackGround/BackGroundGradientView";
-import AuthorizationProgresBar from "../../../../SemiComponents/Other/AuthorizationProgresBar";
 import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTitle";
 import {
   height,
@@ -14,9 +14,10 @@ import * as MediaLibrary from "expo-media-library";
 import BackButtonSVG from "../../../../assets/SVG/Semi SVG/BackButtonSVG";
 import AuthorizationButton from "../../../../SemiComponents/Buttons/Authorization buttons/AuthorizationButton";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLinkToPhotoForAuthorization } from "../../../../redux/Authorization/selectors";
+import { selectId, selectLinkToPhotoForAuthorization } from "../../../../redux/Authorization/selectors";
 import { setLinkToPhotoForAuthorization } from "../../../../redux/Authorization/Actions";
 import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
+import * as FileSystem from 'expo-file-system';
 interface GalleryModalWindowProps {
   index: number;
   gallery: boolean;
@@ -36,43 +37,64 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
   setPressedPage,
 }) => {
   const dispatch = useDispatch();
+  const id=useSelector(selectId)
   const photos: string[] = useSelector(selectLinkToPhotoForAuthorization);
-  const [galleryPhotos, setPhotos] = useState<MediaLibrary.Asset[]>();
+  const [galleryPhotos, setPhotos] = useState<string[]>([]);
   const [photoLibrary, setPhotoLibrary] = useState<PhotoLibrary>({});
   const marginForGalleryPhoto = 1;
   const radiusOfSelectContainer = width * 0.05;
   const [isValdiToContinue, setIsValidToContinue] = useState(false);
   useEffect(() => {
+    const getPhotos = async () => {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+
+      if (status !== "granted") {
+        Alert.alert(
+          "Доступ до медіабібліотеки відмовлено",
+          "Для використання функції вибору фотографій необхідно надати доступ до медіабібліотеки",
+          [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+        );
+        return;
+      }
+      const fetchedAlbums = await MediaLibrary.getAlbumsAsync({
+        includeSmartAlbums: true,
+        
+      });
+      const assetsPromises = fetchedAlbums.map(async (album) => {
+        
+        const { assets } = await MediaLibrary.getAssetsAsync({
+          album,
+          first:Number.MAX_SAFE_INTEGER
+          
+        });
+        return assets;
+      });
+      let assets: MediaLibrary.Asset[] = await Promise.all(assetsPromises).then(
+        (arraysOfAssets) => {
+          return arraysOfAssets.flat();
+        }
+        
+      );
+
+
+      await photos.forEach(async (uri, index) => {
+        setPhotoLibrary((prevLibrary) => {
+          const newLibrary = { ...prevLibrary };
+          newLibrary[uri] = index + 1;
+          return newLibrary;
+        });
+      });
+      let photo=assets.map((asset)=>{
+        return asset.uri
+      })
+      
+      setPhotos(photo);
+    };
     gallery ? getPhotos() : null;
   }, [gallery]);
-  const getPhotos = async () => {
-    const { status } = await MediaLibrary.requestPermissionsAsync();
 
-    if (status !== "granted") {
-      Alert.alert(
-        "Доступ до медіабібліотеки відмовлено",
-        "Для використання функції вибору фотографій необхідно надати доступ до медіабібліотеки",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-      );
-      return;
-    }
 
-    let { assets } = await MediaLibrary.getAssetsAsync({
-      mediaType: "photo",
-      first: Number.MAX_VALUE,
-    });
 
-    photos.forEach(async (uri, index) => {
-      setPhotoLibrary((prevLibrary) => {
-        const newLibrary = { ...prevLibrary };
-        newLibrary[uri] = index + 1;
-        return newLibrary;
-      });
-    });
-
-    setPhotos(assets);
-    assets = [];
-  };
   const getNextGapNumber = () => {
     const numbers = Object.values(photoLibrary).sort((a, b) => a - b);
     let nextGapNumber = 1;
@@ -110,13 +132,14 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
       action: setLinkToPhotoForAuthorization,
       variableField: values.filter((value) => value !== undefined),
       attribute: "linkToPhoto",
-      isAuthorized: false,
+      id
     });
     invokerState.request();
     setGallery(false);
     setPressedPage(null);
     setPhotoLibrary({});
   };
+ 
   return (
     <Modal transparent={true} visible={gallery}>
       <BackGroundGradinetView>
@@ -125,7 +148,10 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
           <FlatList
             showsVerticalScrollIndicator={false}
             data={galleryPhotos}
-            renderItem={({ item, index }) => (
+            renderItem={({ item, index }) => {
+            
+            
+              return(
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={{
@@ -135,28 +161,28 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
                 onPress={() => {
                   setPhotoLibrary((prevLibrary) => {
                     const newLibrary = { ...prevLibrary };
-                    if (newLibrary.hasOwnProperty(item.uri)) {
-                      delete newLibrary[item.uri];
+                    if (newLibrary.hasOwnProperty(item)) {
+                      delete newLibrary[item];
                     } else {
                       if (Object.keys(prevLibrary).length === 6) {
                         return prevLibrary;
                       }
                       const nextEmptyKey = getNextGapNumber();
-                      newLibrary[item.uri] = nextEmptyKey;
+                      newLibrary[item] = nextEmptyKey;
                     }
                     return newLibrary;
                   });
                 }}
               >
                 <Image
-                  source={{ uri: item.uri }}
+                  source={{ uri: item }}
                   style={{
                     width: (width - 2 * marginForGalleryPhoto) / 3,
                     aspectRatio: 1,
                     //backgroundColor: "red",
                   }}
                 />
-                {isValidUriAndNumber(photoLibrary, item.uri) ? (
+                {isValidUriAndNumber(photoLibrary, item) ? (
                   <View
                     style={{
                       position: "absolute",
@@ -181,12 +207,12 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
                         fontWeight: "800",
                       }}
                     >
-                      {photoLibrary[item.uri]}
+                      {photoLibrary[item]}
                     </Text>
                   </View>
                 ) : null}
-              </TouchableOpacity>
-            )}
+              </TouchableOpacity>)
+            }}
             keyExtractor={(item, index) => index.toString()}
             numColumns={3}
           />

@@ -17,6 +17,7 @@ import {
 } from "../../../../redux/Authorization/Actions";
 import {
   selectAuthorizationPage,
+  selectId,
   selectIsPressedNextButtonAuthorization,
   selectSmokeStatusForAuthorization,
 } from "../../../../redux/Authorization/selectors";
@@ -41,7 +42,7 @@ class SmokeStatusPage extends RegistrationPage {
       action: setSmokeStatusForAuthorization,
       variableField: arrayOfBindings[0],
       attribute: "smokeStatus",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
     invokerState.request();
     this.dispatch(
@@ -62,10 +63,10 @@ class SmokeStatusPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
     const { selectedSmokeStatus }: any = this.state;
     this.State.defineState(
-      [selectedSmokeStatus],
+      [selectedSmokeStatus,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -95,6 +96,7 @@ class SmokeStatusPage extends RegistrationPage {
   }
 }
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   smokeStatus: selectSmokeStatusForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

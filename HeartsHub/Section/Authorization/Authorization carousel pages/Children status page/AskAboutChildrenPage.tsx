@@ -16,6 +16,7 @@ import {
 import {
   selectAuthorizationPage,
   selectChildrenStatusForAuthorization,
+  selectId,
   selectIsPressedNextButtonAuthorization,
 } from "../../../../redux/Authorization/selectors";
 
@@ -31,13 +32,16 @@ class AskAboutChildrenPage extends RegistrationPage {
     this.State = this.returnState();
   }
   checkingGoToNextPage(arrayOfBindings: any[]) {
+    
+    
     this.dispatch(setIsPressedNextButtonAuthorization(false));
     const invokerState: InvokerState = new InvokerState({
       dispatch: this.dispatch,
       action: setChildrenStatusForAuthorization,
       variableField: arrayOfBindings[0],
       attribute: "childrenStatus",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
+      
     });
     invokerState.request();
     this.dispatch(
@@ -60,10 +64,11 @@ class AskAboutChildrenPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
+    
     const { selectedChildrenStatus }: any = this.state;
     this.State.defineState(
-      [selectedChildrenStatus],
+      [selectedChildrenStatus,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -96,6 +101,7 @@ class AskAboutChildrenPage extends RegistrationPage {
 }
 
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   childrenStatus: selectChildrenStatusForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),
