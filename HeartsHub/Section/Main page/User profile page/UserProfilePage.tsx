@@ -10,7 +10,8 @@ import {
   selectNameForAuthorization,
   selectSurnameForAuthorization,
 } from "../../../redux/Authorization/selectors";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import { Image } from "expo-image";
 import { height, width } from "../../../SemiComponents/Constants/SizeConstants";
 import { getAge } from "../Recomendation page/Functions";
 import ButtonForProfile from "./ButtonForProfile";

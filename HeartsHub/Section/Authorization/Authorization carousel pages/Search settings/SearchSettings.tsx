@@ -16,6 +16,7 @@ import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTi
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import {
   selectAuthorizationPage,
+  selectId,
   selectIsPressedNextButtonAuthorization,
   selectSearchStatusAge,
   selectSearchStatusGender,
@@ -59,7 +60,7 @@ class SearchSettingsPage extends RegistrationPage {
       action: setSearchStatusRadius,
       variableField: arrayOfBindings[0],
       attribute: "searchRadius",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
 
     const invokerState2: InvokerState = new InvokerState({
@@ -67,7 +68,7 @@ class SearchSettingsPage extends RegistrationPage {
       action: setSearchStatusGender,
       variableField: arrayOfBindings[3],
       attribute: "searchGender",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
 
     const invokerState1: InvokerState = new InvokerState({
@@ -75,7 +76,7 @@ class SearchSettingsPage extends RegistrationPage {
       action: setSearchStatusAge,
       variableField: `${arrayOfBindings[2]}-${arrayOfBindings[1]}`,
       attribute: "searchAge",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
 
     invokerState1.request();
@@ -113,7 +114,7 @@ class SearchSettingsPage extends RegistrationPage {
   };
 
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
     const {
       inputSearchRadius,
       inputSearchMaxAge,
@@ -127,6 +128,7 @@ class SearchSettingsPage extends RegistrationPage {
         inputSearchMaxAge,
         inputSearchMinAge,
         inputSearchGender,
+        id
       ],
       isPressedNextButtonAuthorization as boolean
     );
@@ -392,6 +394,7 @@ const style = StyleSheet.create({
 });
 
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   searchGender: selectSearchStatusGender(state),
   searchAge: selectSearchStatusAge(state),
   searchRadius: selectSearchStatusRadius(state),

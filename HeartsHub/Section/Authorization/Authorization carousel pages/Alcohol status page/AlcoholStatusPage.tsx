@@ -16,6 +16,7 @@ import {
 import {
   selectAlcoholStatusForAuthorization,
   selectAuthorizationPage,
+  selectId,
   selectIsPressedNextButtonAuthorization,
 } from "../../../../redux/Authorization/selectors";
 import { RegistrationPage } from "../../Abstract classes and interfaces/Template method/RegistrationPage";
@@ -36,7 +37,7 @@ class AlcoholStatusPage extends RegistrationPage {
       action: setAlcoholStatusForAuthorization,
       variableField: arrayOfBindings[0],
       attribute: "alcoholStatus",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
     invokerState.request();
     this.dispatch(
@@ -60,10 +61,10 @@ class AlcoholStatusPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
     const { selectedAlcoholStatus }: any = this.state;
     this.State.defineState(
-      [selectedAlcoholStatus],
+      [selectedAlcoholStatus,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -94,6 +95,7 @@ class AlcoholStatusPage extends RegistrationPage {
 }
 
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   alcoholStatus: selectAlcoholStatusForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

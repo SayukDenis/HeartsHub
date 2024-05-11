@@ -17,6 +17,7 @@ import { connect } from "react-redux";
 import {
   selectAuthorizationPage,
   selectHeightForAuthorization,
+  selectId,
   selectIsPressedNextButtonAuthorization,
 } from "../../../../redux/Authorization/selectors";
 import {
@@ -59,7 +60,7 @@ class EnteringYourHeightPage extends RegistrationPage {
       action: setHeigthForAuthorization,
       variableField: this.validHeight(),
       attribute: "height",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
     invokerState.request();
     this.dispatch(
@@ -106,10 +107,10 @@ class EnteringYourHeightPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
     const { inputHeight }: any = this.state;
     this.State.defineState(
-      [inputHeight],
+      [inputHeight,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -226,6 +227,7 @@ const style = StyleSheet.create({
   text: { fontSize: 20, color: "white", fontWeight: "800" },
 });
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   yourHeight: selectHeightForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

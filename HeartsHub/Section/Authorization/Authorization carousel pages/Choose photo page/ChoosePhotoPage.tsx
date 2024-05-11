@@ -1,5 +1,4 @@
 import {
-  Image,
   Modal,
   Platform,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   height,
   width,
 } from "../../../../SemiComponents/Constants/SizeConstants";
+import { Image } from "expo-image";
 import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTitle";
 import PhotoContainer from "./PhotoContainer";
 import AddMainPhotoSVG from "../../../../assets/SVG/Authorization SVG/AddMainPhotoSVG";

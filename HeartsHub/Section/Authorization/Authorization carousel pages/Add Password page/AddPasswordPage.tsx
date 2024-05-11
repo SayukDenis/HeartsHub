@@ -16,6 +16,7 @@ import {
 } from "../../../../redux/Authorization/Actions";
 import {
   selectAuthorizationPage,
+  selectId,
   selectIsPressedNextButtonAuthorization,
   selectSecondPassword,
 } from "../../../../redux/Authorization/selectors";
@@ -57,7 +58,7 @@ class AddPasswordPage extends RegistrationPage {
       action: setSecondPassword,
       variableField: arrayOfBindings[0],
       attribute: "secondPassword",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
     invokerState.request();
     this.dispatch(setIsEnableNextButtonAuthorization(false));
@@ -84,10 +85,10 @@ class AddPasswordPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
     const { password }: any = this.state;
     this.State.defineState(
-      [password],
+      [password,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -199,6 +200,7 @@ class AddPasswordPage extends RegistrationPage {
 }
 
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   secondPassword: selectSecondPassword(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

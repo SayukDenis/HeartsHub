@@ -14,6 +14,7 @@ import {
 import {
   selectAuthorizationPage,
   selectDateForAuthorization,
+  selectId,
   selectIsPressedNextButtonAuthorization,
 } from "../../../../redux/Authorization/selectors";
 import TextInputDataAuthorization from "./TextInputDataAuthorization";
@@ -83,7 +84,7 @@ class EnteringBirthdayPage extends RegistrationPage {
         action: setDateForAuthorization,
         variableField: correctdata,
         attribute: "date",
-        isAuthorized: false,
+        id:arrayOfBindings[arrayOfBindings.length-1]
       });
       invokerState.request();
     }
@@ -119,11 +120,11 @@ class EnteringBirthdayPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization,id }: any = this.props;
     const { inputDay, inputMonth, inputYear, toggleState }: any = this.state;
 
     this.State.defineState(
-      [inputDay, inputMonth, inputYear, toggleState],
+      [inputDay, inputMonth, inputYear, toggleState,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -396,6 +397,7 @@ class EnteringBirthdayPage extends RegistrationPage {
 }
 
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   date: selectDateForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

@@ -1,4 +1,5 @@
-import { Image, TouchableOpacity } from "react-native";
+import {  TouchableOpacity } from "react-native";
+import { Image } from "expo-image";
 import PhotoContainer from "./PhotoContainer";
 import AddSVG from "../../../../assets/SVG/Authorization SVG/AddSVG";
 import { useSelector } from "react-redux";

@@ -1,4 +1,5 @@
 export interface AuthorizationForm {
+    id:string;
     email: string;
     name: string;
     surname: string;

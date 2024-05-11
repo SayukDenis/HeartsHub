@@ -1,10 +1,12 @@
 import { connect } from "react-redux";
 import {
   selectAuthorizationPage,
+  selectId,
   selectIsPressedNextButtonAuthorization,
   selectSearchStatusForAuthorization,
 } from "../../../../redux/Authorization/selectors";
 import { TouchableOpacity, View } from "react-native";
+import React from "react";
 import {
   height,
   width,
@@ -42,7 +44,7 @@ class SearchStatusPage extends RegistrationPage {
       action: setSearchStatusForAuthorization,
       variableField: searchStatus[arrayOfBindings[0]],
       attribute: "searchStatus",
-      isAuthorized: false,
+      id:arrayOfBindings[arrayOfBindings.length-1]
     });
     invokerState.request();
     this.dispatch(
@@ -57,10 +59,10 @@ class SearchStatusPage extends RegistrationPage {
     }
   }
   defineState = () => {
-    const { isPressedNextButtonAuthorization }: any = this.props;
+    const { isPressedNextButtonAuthorization ,id}: any = this.props;
     const { selectedSearchStatus }: any = this.state;
     this.State.defineState(
-      [selectedSearchStatus],
+      [selectedSearchStatus,id],
       isPressedNextButtonAuthorization as boolean
     );
   };
@@ -92,6 +94,7 @@ class SearchStatusPage extends RegistrationPage {
 }
 
 const mapStateToProps = (state: any) => ({
+  id:selectId(state),
   status: selectSearchStatusForAuthorization(state),
   isPressedNextButtonAuthorization:
     selectIsPressedNextButtonAuthorization(state),

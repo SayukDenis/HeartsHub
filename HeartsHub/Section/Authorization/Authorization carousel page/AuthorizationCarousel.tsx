@@ -29,6 +29,7 @@ import {
 import { connect } from "react-redux";
 import {
   setFulfillmentOfTheConditionForTheNextButtonAuthorization,
+  setId,
   setIsEnableNextButtonAuthorization,
   setIsPressedNextButtonAuthorization,
   setSelectedAuthorizationPage,
@@ -37,7 +38,8 @@ import { IStrategy } from "../Abstract classes and interfaces/Strategy/Strategy"
 import Facade from "../Abstract classes and interfaces/Facade/Facade";
 import { AdaptedRegistrationPage } from "../Abstract classes and interfaces/Template method/AdaptedRegistrationPage";
 import { Dispatch, UnknownAction } from "redux";
-import { initObject } from "../../../Local dao/Initialiazation";
+import { v4 as uuidv4 } from "uuid";
+import { updateAuthObjectInDao } from "../../../Local dao/Initialiazation";
 
 class AuthorizationCarousel extends Component implements IStrategy {
   listOfPages: AdaptedRegistrationPage[];
@@ -89,32 +91,35 @@ class AuthorizationCarousel extends Component implements IStrategy {
       bufferEmail,
     }: any = this.props;
     const old = prevProps.fulfillmentOfConditionForNextButtonAuthorization;
-   
+
     if (
       fulfillmentOfConditionForNextButtonAuthorization &&
       old != fulfillmentOfConditionForNextButtonAuthorization
     ) {
       const { page }: any = this.props;
       if (page == this.listOfPages.length) {
+        updateAuthObjectInDao("id",
+          (Math.floor(Math.random() * 100000000000) + 1).toString()
+        );
         (this.props as any).navigation.reset({
           index: 0,
           routes: [{ name: "MainCarouselPageNavigation" as never }],
         });
       }
-      if(page==1&&email!="" &&bufferEmail==email){
+      if (page == 1 && email != "" && bufferEmail == email) {
         this.scrollViewRef.current?.scrollTo({
-          x: (page+1) * width,
+          x: (page + 1) * width,
           y: 0,
           animated: true,
         });
         this.dispatch(setSelectedAuthorizationPage(page + 2));
         Keyboard.dismiss();
-  
+
         this.dispatch(setIsEnableNextButtonAuthorization(false));
         this.dispatch(
           setFulfillmentOfTheConditionForTheNextButtonAuthorization(false)
         );
-        return
+        return;
       }
       this.scrollViewRef.current?.scrollTo({
         x: page * width,

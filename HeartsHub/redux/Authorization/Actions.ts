@@ -108,7 +108,10 @@ export const setGeoLocation = (geoLocation: number) => ({
   type: 'SET_GEO_LOCATION',
   payload: geoLocation,
 });
-
+export const setId=(id:string)=> ({
+  type: 'SET_ID',
+  payload: id,
+});
 export const setSecondPassword = (secondPassword: string) => ({
   type: 'SET_SECOND_PASSWORD',
   payload: secondPassword,

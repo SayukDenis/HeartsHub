@@ -1,38 +1,29 @@
-import { Alert, FlatList, Image, Modal, Text, View } from "react-native";
+import { Alert, FlatList,  Modal, View } from "react-native";
 import BackGroundGradinetView from "../../../../SemiComponents/BackGround/BackGroundGradientView";
-import AuthorizationProgresBar from "../../../../SemiComponents/Other/AuthorizationProgresBar";
+import { Image } from "expo-image";
 import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTitle";
 import {
   height,
-  heightOfAuthorizationButton,
   width,
-  widthOfButtonNext,
 } from "../../../../SemiComponents/Constants/SizeConstants";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import * as MediaLibrary from "expo-media-library";
-import BackButtonSVG from "../../../../assets/SVG/Semi SVG/BackButtonSVG";
-import AuthorizationButton from "../../../../SemiComponents/Buttons/Authorization buttons/AuthorizationButton";
-import { useDispatch, useSelector } from "react-redux";
-import { selectLinkToPhotoForAuthorization } from "../../../../redux/Authorization/selectors";
-import { setLinkToPhotoForAuthorization } from "../../../../redux/Authorization/Actions";
+
 interface GalleryModalWindowProps {
   gallery: boolean;
   setGallery: () => void;
   setPhoto: (photo: string) => void;
 }
-interface PhotoLibrary {
-  [uri: string]: number;
-}
+
 
 const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
   gallery,
   setGallery,
   setPhoto,
 }) => {
-  const [galleryPhotos, setPhotos] = useState<MediaLibrary.Asset[]>();
+  const [galleryPhotos, setPhotos] = useState<string[]>();
   const marginForGalleryPhoto = 1;
-  const radiusOfSelectContainer = width * 0.05;
   useEffect(() => {
     gallery ? getPhotos() : null;
   }, [gallery]);
@@ -48,12 +39,30 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
       return;
     }
 
-    let { assets } = await MediaLibrary.getAssetsAsync({
-      mediaType: "photo",
-      first: Number.MAX_VALUE,
+    const fetchedAlbums = await MediaLibrary.getAlbumsAsync({
+      includeSmartAlbums: true,
+      
     });
-
-    setPhotos(assets);
+    const assetsPromises = fetchedAlbums.map(async (album) => {
+      
+      const { assets } = await MediaLibrary.getAssetsAsync({
+        album,
+        first:Number.MAX_SAFE_INTEGER
+        
+      });
+      return assets;
+    });
+    let assets: MediaLibrary.Asset[] = await Promise.all(assetsPromises).then(
+      (arraysOfAssets) => {
+        return arraysOfAssets.flat();
+      }
+      
+    );
+    let photo=assets.map((asset)=>{
+      return asset.uri
+    })
+    
+    setPhotos(photo);
     assets = [];
   };
 
@@ -74,11 +83,11 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
                 }}
                 onPress={() => {
                   setGallery();
-                  setPhoto(item.uri);
+                  setPhoto(item);
                 }}
               >
                 <Image
-                  source={{ uri: item.uri }}
+                  source={{ uri: item}}
                   style={{
                     width: (width - 2 * marginForGalleryPhoto) / 3,
                     aspectRatio: 1,
