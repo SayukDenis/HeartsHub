@@ -20,7 +20,7 @@ export let users = [user1, user2, user3, user4, user5, user6, user7, user8];
 
 function JohnyDepp(): User {
   const user: User = new User();
-  user.id = 1;
+  user.id = "1";
   user.email = "johnydepp@gmail.com";
   user.name = "Джонні";
   user.surname = "Депп";
@@ -47,7 +47,7 @@ function JohnyDepp(): User {
 
 function HenryCavill(): User {
   const user: User = new User();
-  user.id = 2;
+  user.id = "2";
   user.name = "Генрі";
   user.surname = "Кевілл";
   user.date = "1983-05-05";
@@ -77,7 +77,7 @@ function HenryCavill(): User {
 }
 function TimothéeChalamet(): User {
   const user: User = new User();
-  user.id = 3;
+  user.id = "3";
   user.name = "Тімоті";
   user.surname = "Шаламе";
   user.date = "1995-12-27";
@@ -106,7 +106,7 @@ function TimothéeChalamet(): User {
 }
 function CristianoRonaldo(): User {
   const user: User = new User();
-  user.id = 4;
+  user.id = "4";
   user.name = "Кріштіану";
   user.surname = "Роналду";
   user.date = "1985-02-05";
@@ -134,7 +134,7 @@ function CristianoRonaldo(): User {
 }
 function ElonMusk(): User {
   const user: User = new User();
-  user.id = 5;
+  user.id = "5";
   user.name = "Ілон";
   user.surname = "Маск";
   user.date = "1971-06-28";
@@ -159,7 +159,7 @@ function ElonMusk(): User {
 }
 function TomHanks(): User {
   const user: User = new User();
-  user.id = 6;
+  user.id = "6";
   user.name = "Том";
   user.surname = "Хенкс";
   user.date = "1956-07-09";
@@ -186,7 +186,7 @@ function TomHanks(): User {
 
 function BradPitt(): User {
   const user: User = new User();
-  user.id = 7;
+  user.id = "7";
   user.name = "Бред";
   user.surname = "Пітт";
   user.date = "1963-12-18";
@@ -211,7 +211,7 @@ function BradPitt(): User {
 }
 function LeonardoDiCaprio(): User {
   const user: User = new User();
-  user.id = 8;
+  user.id = "8";
   user.name = "Леонардо";
   user.surname = "Ді Капріо";
   user.date = "1974-11-11";

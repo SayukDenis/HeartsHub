@@ -40,7 +40,7 @@ class SettingsCategoryCarousel
 {
   listOfPages: AdaptedRegistrationPage[];
   scrollViewRef: RefObject<ScrollView> = createRef<ScrollView>();
-  private dispatch: Dispatch<UnknownAction>;
+  dispatch: Dispatch<UnknownAction>;
   constructor(props: any) {
     super(props);
     this.listOfPages = props.listOfPages;

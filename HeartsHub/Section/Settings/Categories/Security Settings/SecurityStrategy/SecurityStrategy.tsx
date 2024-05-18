@@ -30,6 +30,7 @@ import { connect } from "react-redux";
 import ConfirmButton from "./ConfirmButton";
 import ConfirmModalWindow from "./ConfirmModalWindow";
 import { Dispatch, UnknownAction } from "redux";
+import { isFulfilled } from "@reduxjs/toolkit";
 
 interface SecurityStrategyProps {
   listOfPages: AdaptedRegistrationPage[];
@@ -46,31 +47,29 @@ class SecurityStrategy
     super(props);
     this.listOfPages = props.listOfPages;
     this.dispatch = props.dispatch;
-  
-    this.state = { modalWindow: false };
+    
+    this.state = { modalWindow: false, dispatch: this.dispatch };
     this.dispatch(setSelectedAuthorizationPage(1));
   }
 
   pressOnBackButton = () => {
     const { page }: any = this.props;
+
     this.dispatch(setSelectedAuthorizationPage(page - 1));
     this.scrollViewRef.current?.scrollTo({ x: page - 2, y: 0, animated: true });
   };
   pressOnNextButton() {
-    
-    //this.dispatch(setIsPressedNextButtonAuthorization(true));
+  
   }
- 
+
+
   componentDidUpdate(prevProps: any) {
-      
-    const { fulfillmentOfConditionForNextButtonAuthorization, page }: any =
+    const { fulfillmentOfConditionForNextButtonAuthorization, page,isPressedNextButtonAuthorization }: any =
       this.props;
-    const old = prevProps.fulfillmentOfConditionForNextButtonAuthorization;
+
     if (
-      fulfillmentOfConditionForNextButtonAuthorization &&
-      old != fulfillmentOfConditionForNextButtonAuthorization
+      fulfillmentOfConditionForNextButtonAuthorization 
     ) {
-      
       if (this.listOfPages.length == page) {
         this.setState({ modalWindow: true });
       } else {

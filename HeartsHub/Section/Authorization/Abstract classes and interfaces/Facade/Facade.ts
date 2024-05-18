@@ -34,7 +34,7 @@ class Facade {
         const pageFabrics: FabricOfRegistrationPages[] = [
             new EnteringAnEmailAddressPageFabric(),
             new VerifyCodePageFabric(),
-            new EnterNameAndSurnamePageFabric(),
+           /* new EnterNameAndSurnamePageFabric(),
             new EnteringBirthdayPageFabric(),
             new EnteringYourGenderPageFabric(),
             new IntroductionOfSexualOrientationPageFabric(),
@@ -47,7 +47,7 @@ class Facade {
             new SearchSettingsFabric(),
             new LocationPageFabric(),
             new SelfInformationPageFabric(),
-            new ChoosePhotoPageFabric(),
+            new ChoosePhotoPageFabric(),*/
         ];
 
         return this.createPages(pageFabrics);

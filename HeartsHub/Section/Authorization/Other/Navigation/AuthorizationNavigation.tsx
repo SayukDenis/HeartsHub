@@ -4,6 +4,7 @@ import MainCarouselPageNavigation from "../../../Main page/Navigation/MainCarous
 import AuthorizationCarousel from "../../Authorization carousel page/AuthorizationCarousel";
 import SignInOrSignUpPage from "../../Authorization carousel page/Sign in or sign up page/SignInOrSignUpPage";
 import { selectId } from "../../../../redux/Authorization/selectors";
+import Authorization from "../../Authorization carousel page/Authorization";
 
 const AuthorizationNavigation = () => {
   const id =useSelector(selectId);
@@ -34,7 +35,7 @@ const AuthorizationNavigation = () => {
         <Stack.Screen name="SignInOrSignUpPage" component={SignInOrSignUpPage} />
         <Stack.Screen
           name="AuthorizationCarousel"
-          component={AuthorizationCarousel}
+          component={Authorization}
           options={{
             gestureEnabled: false,
           }}

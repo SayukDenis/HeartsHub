@@ -97,6 +97,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
         onPress={() => {
           pressOnConfirmButton();
           dispatch(setIsPressedNextButtonAuthorization(true));
+
         }}
         disabled={!isConfirmButtonEnabled}
         style={{
