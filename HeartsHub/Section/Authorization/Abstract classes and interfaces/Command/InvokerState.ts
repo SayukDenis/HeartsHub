@@ -24,6 +24,7 @@ class InvokerState {
         this.action = props.action
         this.variableField = props.variableField
         this.id = props.id
+  
         this.attribute = props.attribute
         this.Invoker = this.getInvokerState()
 

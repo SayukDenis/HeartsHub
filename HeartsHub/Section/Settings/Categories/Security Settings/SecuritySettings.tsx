@@ -3,6 +3,7 @@ import Facade from "../../../Authorization/Abstract classes and interfaces/Facad
 import SecurityStrategy from "./SecurityStrategy/SecurityStrategy";
 import { useSelector } from "react-redux";
 import { selectSecondPassword } from "../../../../redux/Authorization/selectors";
+import context from "../../../Authorization/Abstract classes and interfaces/Strategy/Context";
 
 interface SecuritySettingsProps {
   route: any;
@@ -16,15 +17,13 @@ const SecuritySettings: React.FC<SecuritySettingsProps> = ({ route }) => {
     }
     return index;
   };
-  return (
-    <SecurityStrategy
-      listOfPages={
-        new Facade().getSecuritySettingsRegistrationPages()[
-          getId(route.params.id as any)
-        ]
-      }
-    />
-  );
+      const strategy:any=SecurityStrategy
+      context.listOfPages=new Facade().getSecuritySettingsRegistrationPages()[
+        getId(route.params.id as any)
+      ]
+      context.strategyProps={id:route.params.id}
+      context.setStrategy(strategy)
+      return context.render()
 };
 
 export default SecuritySettings;

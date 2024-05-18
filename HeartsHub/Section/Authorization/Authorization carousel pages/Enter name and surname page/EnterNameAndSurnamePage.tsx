@@ -100,6 +100,7 @@ class EnterNameAndSurnamePage extends RegistrationPage {
   defineState = () => {
     const { isPressedNextButtonAuthorization,id}: any = this.props;
     const { inputName, inputSurName }: any = this.state;
+   
     this.State.defineState(
       [inputName, inputSurName,id],
       isPressedNextButtonAuthorization as boolean

@@ -22,7 +22,7 @@ export const initObject: AuthorizationForm = {
     linkToPhoto:[],
     searchRadius: "2",
     searchAge: "18-99",
-    searchGender: "Чоловік",
+    searchGender: "Чоловіки",
     secondPassword: "",
     geoLocation:-2
   };
@@ -68,12 +68,13 @@ export const getAuthObjectFromDao = async (dispatch:Dispatch<UnknownAction>):Pro
   ): Promise<void> => {
     try {
       const jsonData = await AsyncStorage.getItem(authFormKey);
+
       if (jsonData !== null) {
         const currentObj = JSON.parse(jsonData);
         currentObj[key] = newValue;
     
         await AsyncStorage.setItem(authFormKey, JSON.stringify(currentObj));
-       // console.log(`Значення для ключа '${key}' успішно оновлено в AsyncStorage.`);
+        //console.log(`Значення для ключа '${key}' успішно оновлено в AsyncStorage.`);
       } else {
         console.log('Дані за вказаним ключем не знайдено.');
       }

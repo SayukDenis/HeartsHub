@@ -29,7 +29,6 @@ import {
 import { connect } from "react-redux";
 import {
   setFulfillmentOfTheConditionForTheNextButtonAuthorization,
-  setId,
   setIsEnableNextButtonAuthorization,
   setIsPressedNextButtonAuthorization,
   setSelectedAuthorizationPage,
@@ -38,20 +37,18 @@ import { IStrategy } from "../Abstract classes and interfaces/Strategy/Strategy"
 import Facade from "../Abstract classes and interfaces/Facade/Facade";
 import { AdaptedRegistrationPage } from "../Abstract classes and interfaces/Template method/AdaptedRegistrationPage";
 import { Dispatch, UnknownAction } from "redux";
-import { v4 as uuidv4 } from "uuid";
 import { updateAuthObjectInDao } from "../../../Local dao/Initialiazation";
 
 class AuthorizationCarousel extends Component implements IStrategy {
   listOfPages: AdaptedRegistrationPage[];
   scrollViewRef: RefObject<ScrollView>;
-  private dispatch: Dispatch<UnknownAction>;
+  dispatch: Dispatch<UnknownAction>;
   constructor(props: any) {
     super(props);
-    const facade = new Facade();
     this.state = {
       progress: 0,
     };
-    this.listOfPages = facade.getRegistrationPages();
+    this.listOfPages = props.listOfPages
     this.scrollViewRef = createRef();
     this.dispatch = props.dispatch;
   }
@@ -98,6 +95,7 @@ class AuthorizationCarousel extends Component implements IStrategy {
     ) {
       const { page }: any = this.props;
       if (page == this.listOfPages.length) {
+     
         updateAuthObjectInDao("id",
           (Math.floor(Math.random() * 100000000000) + 1).toString()
         );

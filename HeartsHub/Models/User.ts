@@ -2,7 +2,7 @@ import { AuthorizationForm } from "../Section/Authorization/Other/Data types/Int
 
 
 export class User implements AuthorizationForm{
-    id!:number
+    id!:string
     email!: string;
     name!: string;
     surname!: string;
@@ -17,4 +17,9 @@ export class User implements AuthorizationForm{
     searchStatus!: string;
     selfInformation!: string;
     linkToPhoto!: string[];
+    searchRadius!:string;
+    searchAge!:string;
+    searchGender!:string;
+    secondPassword!:string;
+    geoLocation!:number
 }
