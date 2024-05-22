@@ -1,20 +1,22 @@
 import { ICommand } from "./Command";
-import UnauthorizedInvoker, { UnauthorizedInvokerProps } from "./UnauthorizedInvoker";
+import { IInvoker, UnauthorizedInvokerProps } from "./UnauthorizedInvoker";
 
-export interface AuthorizedInvokerProps extends UnauthorizedInvokerProps {
-    thirdCommand: ICommand;
-}
 
-class AuthorizedInvoker extends UnauthorizedInvoker {
+
+class AuthorizedInvoker implements IInvoker {
+    private firstCommand: ICommand
+    private secondCommand:ICommand
     private thirdCommand: ICommand;
 
-    constructor(props: AuthorizedInvokerProps) {
-        super(props);
+    constructor(props: UnauthorizedInvokerProps) {
+        this.firstCommand = props.firstCommand
+        this.secondCommand=props.secondCommand
         this.thirdCommand = props.thirdCommand;
     }
 
     updateVariable() {
-        super.updateVariable(); 
+        this.firstCommand.update()
+        this.secondCommand.update()
         this.thirdCommand.update();
     }
 }
