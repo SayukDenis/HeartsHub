@@ -28,7 +28,7 @@ class UnauthorizedInvoker implements IInvoker {
 
     }
     updateVariable() {
-        if(this.id!&&this.id!=""){
+        if(this.id&&this.id!=""){
             this.context.transitionTo(new AuthorizedInvoker({ firstCommand: this.firstCommand, secondCommand: this.secondCommand, thirdCommand: this.thirdCommand,id:this.id,context:this.context}))
             this.context.request()
         }

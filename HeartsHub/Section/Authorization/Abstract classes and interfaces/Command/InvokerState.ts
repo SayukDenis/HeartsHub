@@ -2,11 +2,8 @@ import { Dispatch, UnknownAction } from "redux"
 import Command, { CommandProps } from "./Command"
 import SaveInLocalStorageCommand from "./SaveInLocalStorageCommand"
 import UnauthorizedInvoker, { IInvoker } from "./UnauthorizedInvoker"
-import AuthorizedInvoker from "./AuthorizedInvoker"
 import SendToServerCommand from "./SendToServerCommand"
-import { useSelector } from "react-redux"
-import { selectId } from "../../../../redux/Authorization/selectors"
-import context from "../Strategy/Context"
+
 
 interface InvokerStateProps extends CommandProps {
     attribute: string
@@ -25,10 +22,8 @@ class InvokerState {
         this.action = props.action
         this.variableField = props.variableField
         this.id = props.id
-  
         this.attribute = props.attribute
         this.Invoker = this.getInvokerState()
-
     }
     private getInvokerState(): IInvoker {
         const firstCommand: Command = new Command({ dispatch: this.dispatch, action: this.action, variableField: this.variableField })

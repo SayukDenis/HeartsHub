@@ -1,4 +1,4 @@
-import { Alert, FlatList, Modal, Text, View } from "react-native";
+import { Alert, FlatList, Modal, Platform, Text, View } from "react-native";
 import { Image } from "expo-image";
 import BackGroundGradinetView from "../../../../SemiComponents/BackGround/BackGroundGradientView";
 import AuthorizationTitle from "../../../../SemiComponents/Other/AuthorizationTitle";
@@ -18,6 +18,8 @@ import { selectId, selectLinkToPhotoForAuthorization } from "../../../../redux/A
 import { setLinkToPhotoForAuthorization } from "../../../../redux/Authorization/Actions";
 import InvokerState from "../../Abstract classes and interfaces/Command/InvokerState";
 import * as FileSystem from 'expo-file-system';
+import Target from "../../Abstract classes and interfaces/AdapterPhoto/Target";
+import AdapterPhoto from "../../Abstract classes and interfaces/AdapterPhoto/AdapterPhoto";
 interface GalleryModalWindowProps {
   index: number;
   gallery: boolean;
@@ -87,8 +89,15 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
       let photo=assets.map((asset)=>{
         return asset.uri
       })
+      if(Platform.Version=="android"){
+        const target=new Target(photo)
+        setPhotos(target.request());
+      }
+      else{
+        const adaptedTarget=new AdapterPhoto(photo)
+        setPhotos(adaptedTarget.request());
+      }
       
-      setPhotos(photo);
     };
     gallery ? getPhotos() : null;
   }, [gallery]);

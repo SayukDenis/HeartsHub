@@ -6,8 +6,7 @@ import CancelSVG from "../../../../assets/SVG/Main Page SVG/CancelSVG";
 import Command from "../Command/Command";
 import RealModalWindow from "./RealModalWIndow";
 import { Dispatch, UnknownAction } from "redux";
-import { IInvoker } from "../Command/UnauthorizedInvoker";
-import InvokerState from "../Command/InvokerState";
+
 
 export class ProxyModalWindow implements ISubject {
     dispatch:Dispatch<UnknownAction>
@@ -22,7 +21,7 @@ export class ProxyModalWindow implements ISubject {
     if (isCodeVerify == null) {
       return null;
     } else if (isCodeVerify == false) {
-        const radius=20
+      const radius=20
       return (
         <Modal 
         visible={true}
