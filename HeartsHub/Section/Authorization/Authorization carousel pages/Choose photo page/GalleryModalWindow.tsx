@@ -58,6 +58,7 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
         );
         return;
       }
+      
       const fetchedAlbums = await MediaLibrary.getAlbumsAsync({
         includeSmartAlbums: true,
         
@@ -87,6 +88,7 @@ const GalleryModalWindow: React.FC<GalleryModalWindowProps> = ({
         });
       });
       let photo=assets.map((asset)=>{
+        
         return asset.uri
       })
       if(Platform.Version=="android"){

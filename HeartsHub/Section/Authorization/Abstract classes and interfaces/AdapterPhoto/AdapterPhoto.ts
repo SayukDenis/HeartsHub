@@ -9,9 +9,10 @@ class AdapterPhoto extends Target {
     public request(): string[] {
         const adaptedLinkPhotos:string[] = this.linksToPhoto.map((url: string) => {
             const urlParts = url.split('/');
-            const lastPart = urlParts[urlParts.length - 1];
-            const folderId = lastPart.slice(0, lastPart.length - 1);
-            const newUrl = `ph:/id/${folderId}`;
+
+            const folderId =urlParts.slice(0, urlParts.length-2);
+            const result=folderId.join("/")
+            const newUrl = `${result}`;
             return newUrl;
         })
         return adaptedLinkPhotos
